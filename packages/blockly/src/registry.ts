@@ -17,13 +17,30 @@ import { installAllBlocks } from '@blockly/field-colour';
  * to other plugins. This registry allows other plugins to register
  * new Toolboxes, Blocks and Generators that users can use in the
  * Blockly editor.
+ *
+ * One registry instance is created per `BlocklyEditorFactory` (i.e. shared
+ * across all open `.jpblockly` documents in the same JupyterLab session).
+ * External plugins — such as `jupyter-tidyblocks-blocks` — receive a
+ * reference to this registry via the `IBlocklyRegistry` token and use it
+ * to register additional toolboxes, block definitions, and generators.
  */
 export class BlocklyRegistry implements IBlocklyRegistry {
+  // Map of toolbox name → Blockly toolbox definition object.
+  // Keyed by the human-readable label shown in the toolbar dropdown.
   private _toolboxes: Map<string, ToolboxDefinition>;
+  // Map of kernel language name → Blockly code generator instance.
+  // Keys match the `language` field reported by a Jupyter kernel spec
+  // (e.g. 'python', 'javascript', 'lua').
   private _generators: Map<string, Blockly.Generator>;
 
   /**
    * Constructor of BlocklyRegistry.
+   *
+   * Seeds the registry with:
+   *  - A 'default' toolbox containing Blockly's built-in block categories
+   *    (Logic, Loops, Math, Text, Lists, Color, Variables, Functions).
+   *  - Python, JavaScript, and Lua generators from Blockly core.
+   *  - The `@blockly/field-colour` colour blocks wired up to all generators.
    */
   constructor() {
     this._toolboxes = new Map<string, ToolboxDefinition>();
@@ -34,7 +51,8 @@ export class BlocklyRegistry implements IBlocklyRegistry {
     this._generators.set('javascript', javascriptGenerator);
     this._generators.set('lua', luaGenerator);
 
-    // register color blocks with their respective language generators
+    // Register colour-picker blocks and their code generators for all
+    // supported languages so colour blocks work out of the box.
     installAllBlocks({
       javascript: javascriptGenerator,
       python: pythonGenerator,
@@ -96,9 +114,16 @@ export class BlocklyRegistry implements IBlocklyRegistry {
 }
 
 namespace Private {
-  // Dynamically importing the language modules needed for each respective
-  // user, in order to change the Blockly language in accordance to the
-  // JL one.
+  /**
+   * Dynamically import a Blockly locale message module and apply it.
+   *
+   * JupyterLab reports locale as a BCP-47 tag (e.g. 'fr_FR'). The manager
+   * derives a two-letter key from the last two characters of that tag and
+   * passes it here. We map that key to the correct Blockly `msg/*` bundle
+   * and call `Blockly.setLocale` so block labels update immediately.
+   *
+   * Unrecognized languages fall back to English and emit a console warning.
+   */
   export async function importLanguageModule(language: string) {
     let module: Promise<any>;
     switch (language) {
@@ -111,7 +136,8 @@ namespace Private {
       case 'Fr':
         module = import('blockly/msg/fr');
         break;
-      case 'Sa' || 'Ar':
+      case 'Sa':
+      case 'Ar':
         module = import('blockly/msg/ar');
         break;
       case 'Cz':

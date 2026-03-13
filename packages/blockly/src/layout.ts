@@ -13,13 +13,31 @@ import { BlocklyManager } from './manager';
 import { THEME } from './utils';
 
 /**
- * A blockly layout to host the Blockly editor.
+ * BlocklyLayout is the core visual container for a `.jpblockly` document.
+ *
+ * It is a `SplitLayout` (vertical) with two children:
+ *  1. `_host` — a plain `Widget` whose DOM node is handed to `Blockly.inject`
+ *     to mount the Blockly SVG workspace.
+ *  2. `_cell` — a read-only `CodeCell` that shows the generated code and
+ *     displays kernel execution output (tables, plots, etc.) below the
+ *     Blockly canvas.
+ *
+ * Responsibility breakdown:
+ *  - Injects and sizes the Blockly workspace on attach/resize.
+ *  - Listens to workspace change events and re-generates source code into
+ *    the code-preview cell on every block edit.
+ *  - Implements `run()` which serialises the workspace, executes the code
+ *    via the kernel, and surfaces errors through JupyterLab dialogs.
+ *  - Serialises/deserialises the workspace JSON for document save/load.
  */
 export class BlocklyLayout extends SplitLayout {
+  // The DOM container that Blockly's SVG workspace is injected into.
   private _host: Widget;
   private _manager: BlocklyManager;
+  // The live Blockly workspace (SVG-backed); created in onAfterAttach.
   private _workspace: Blockly.WorkspaceSvg;
   private _sessionContext: ISessionContext;
+  // Read-only code cell that previews generated code and shows outputs.
   private _cell: CodeCell;
 
   /**
@@ -126,34 +144,34 @@ export class BlocklyLayout extends SplitLayout {
   }
 
   /**
-   * Return the extra coded (if it exists), composed of the individual
-   * data from each block in the workspace, which are defined in the
-   * toplevel_init property. (e.g. : imports needed for the block)
+   * Collect the `toplevel_init` strings defined on block types currently
+   * present in the workspace and return them as a single deduplicated string.
    *
-   * Add extra code example:
-   * Blockly.Blocks['block_name'].toplevel_init = `import numpy`
+   * Block definitions may attach a `toplevel_init` property to declare
+   * Python import statements (or other preamble code) required by that block
+   * type.  For example:
+   *
+   *   Blockly.Blocks['tidyblocks_data_penguins'].toplevel_init =
+   *     'import pandas as pd\nimport seaborn as sns\n';
+   *
+   * This method walks all blocks on the canvas, collects each unique
+   * `toplevel_init` string exactly once (regardless of how many blocks of
+   * that type appear), and concatenates them.  The result is prepended to
+   * the generator output before execution so that required libraries are
+   * always imported.
    */
   getBlocksToplevelInit(): string {
-    // Initalize string which will return the extra code provided
-    // by the blocks, in the toplevel_init property.
+    const seen = new Set<string>();
     let finalToplevelInit = '';
 
-    // Get all the blocks in the workspace in order.
-    const ordered = true;
-    const used_blocks = this._workspace.getAllBlocks(ordered);
-
-    // For each block in the workspace, check if theres is a toplevel_init,
-    // if there is, add it to the final string.
-    for (const block in used_blocks) {
-      const current_block = used_blocks[block].type;
-      if (Blockly.Blocks[current_block].toplevel_init) {
-        // console.log(Blockly.Blocks[current_block].toplevel_init);
-        // Attach it to the final string
-        const string = Blockly.Blocks[current_block].toplevel_init;
-        finalToplevelInit = finalToplevelInit + string;
+    const used_blocks = this._workspace.getAllBlocks(true);
+    for (const block of used_blocks) {
+      const def = Blockly.Blocks[block.type];
+      if (def?.toplevel_init && !seen.has(def.toplevel_init)) {
+        seen.add(def.toplevel_init);
+        finalToplevelInit += def.toplevel_init;
       }
     }
-    // console.log(finalToplevelInit);
     return finalToplevelInit;
   }
 
@@ -166,23 +184,29 @@ export class BlocklyLayout extends SplitLayout {
     // Serializing our workspace into the chosen language generator.
     const code =
       extra_init + this._manager.generator.workspaceToCode(this._workspace);
-    //const code = "import ipywidgets as widgets\nwidgets.IntSlider()";
     this._cell.model.sharedModel.setSource(code);
 
-    // Execute the code using the kernel, by using a static method from the
-    // same class to make an execution request.
-    if (this._sessionContext.hasNoKernel) {
-      // Check whether there is a kernel
+    // Nothing to run if the workspace has no blocks.
+    if (!code.trim()) {
       showErrorMessage(
-        'Select a valid kernel',
-        `There is not a valid kernel selected, select one from the dropdown menu in the toolbar.
-        If there isn't a valid kernel please install 'xeus-python' from Pypi.org or using mamba.
-        `
+        'No blocks',
+        'Add blocks to the workspace before running.'
+      );
+      return;
+    }
+
+    // Execute the code using the kernel.
+    if (this._sessionContext.hasNoKernel) {
+      showErrorMessage(
+        'No kernel',
+        'Select a kernel from the dropdown in the toolbar before running.'
       );
     } else {
       CodeCell.execute(this._cell, this._sessionContext)
         .then(() => this._resizeWorkspace())
-        .catch(e => console.error(e));
+        .catch(e =>
+          showErrorMessage('Execution error', String(e))
+        );
     }
   }
 
@@ -212,19 +236,26 @@ export class BlocklyLayout extends SplitLayout {
 
   /**
    * Handle `after-attach` messages sent to the widget.
+   *
+   * This is the earliest point at which the host node is in the DOM, so
+   * `Blockly.inject` must be called here (not in the constructor) to ensure
+   * the SVG workspace is sized correctly.
+   *
+   * A workspace change listener keeps the code-preview cell in sync with the
+   * canvas as the user drags, connects, and edits blocks.
    */
   protected onAfterAttach(msg: Message): void {
     super.onAfterAttach(msg);
-    //inject Blockly with appropiate JupyterLab theme.
+    // Inject Blockly into the host node with the JupyterLab-themed styles.
     this._workspace = Blockly.inject(this._host.node, {
       toolbox: this._manager.toolbox,
       theme: THEME
     });
 
+    // Regenerate source code and update the preview cell on every workspace
+    // change (block added, moved, connected, field edited, etc.).
     this._workspace.addChangeListener(() => {
-      // Get extra code from the blocks in the workspace.
       const extra_init = this.getBlocksToplevelInit();
-      // Serializing our workspace into the chosen language generator.
       const code =
         extra_init + this._manager.generator.workspaceToCode(this._workspace);
       this._cell.model.sharedModel.setSource(code);

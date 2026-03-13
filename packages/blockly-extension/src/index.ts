@@ -22,11 +22,34 @@ import {
   registerWidgetManager
 } from '@jupyter-widgets/jupyterlab-manager';
 
-import { BlocklyEditorFactory } from 'jupyterlab-blockly';
-import { IBlocklyRegistry } from 'jupyterlab-blockly';
-import { BlocklyEditor } from 'jupyterlab-blockly';
+import { BlocklyEditorFactory } from 'jupyter-tidyblocks';
+import { IBlocklyRegistry } from 'jupyter-tidyblocks';
+import { BlocklyEditor } from 'jupyter-tidyblocks';
+
+import { registerTidyblocks } from 'jupyter-tidyblocks-blocks';
 
 import { blockly_icon } from './icons';
+
+// ---------------------------------------------------------------------------
+// Extension activation overview
+//
+// 1.  A `BlocklyEditorFactory` is created — it holds the shared
+//     `BlocklyRegistry` (toolboxes + generators) and acts as the JupyterLab
+//     document-model factory for `.jpblockly` files.
+//
+// 2.  The `.jpblockly` file type is registered with `app.docRegistry` so
+//     JupyterLab knows to open these files with the Blockly editor.
+//
+// 3.  A "New Blockly Editor" command is added to the launcher, command
+//     palette, and kernel menu so users can create files and control the
+//     kernel lifecycle.
+//
+// 4.  `registerTidyblocks(registry)` is called to add the 'Tidy Data'
+//     toolbox and all tidyblocks_* Python generators to the shared registry.
+//
+// 5.  The registry is returned as the `IBlocklyRegistry` token value so
+//     other plugins can extend it with their own blocks and toolboxes.
+// ---------------------------------------------------------------------------
 
 /**
  * The name of the factory that creates the editor widgets.
@@ -144,7 +167,7 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
       fileFormat: 'json',
       extensions: ['.jpblockly'],
       mimeTypes: ['application/json'],
-      icon: jsonIcon,
+      icon: jsonIcon as any,
       iconLabel: 'JupyterLab-Blockly'
     });
     // Registering the widget factory
@@ -328,7 +351,7 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
       tracker.forEach(panel => {
         registerWidgetManager(
           panel.context as any,
-          panel.content.rendermime,
+          panel.content.rendermime as any,
           widgetRenderers([panel.content.cell])
         );
       });
@@ -336,11 +359,14 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
       tracker.widgetAdded.connect((sender, panel) => {
         registerWidgetManager(
           panel.context as any,
-          panel.content.rendermime,
+          panel.content.rendermime as any,
           widgetRenderers([panel.content.cell])
         );
       });
     }
+
+    // Register all tidy-data blocks and the Tidy Data toolbox.
+    registerTidyblocks(widgetFactory.registry);
 
     return widgetFactory.registry;
   }

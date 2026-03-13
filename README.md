@@ -1,107 +1,92 @@
-# jupyterlab-blockly
+# jupyter-tidyblocks
 
-[![Github Actions Status](https://github.com/QuantStack/jupyterlab-blockly/actions/workflows/build.yml/badge.svg)](https://github.com/quantstack/jupyterlab-blockly/actions/workflows/build.yml)
-[![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge-launch.svg)](https://jupyterlab-blockly.readthedocs.io/en/latest/lite/lab/index.html?path=example.jpblockly)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/quantstack/jupyterlab-blockly/main?urlpath=lab/tree/examples/example.jpblockly)
+[![Github Actions Status](https://github.com/teonbrooks/jupyter-tidyblocks/actions/workflows/build.yml/badge.svg)](https://github.com/teonbrooks/jupyter-tidyblocks/actions/workflows/build.yml)
 
+Tidy data analysis with Blockly blocks for JupyterLab.
 
-Blockly extension for JupyterLab.
+Drag and drop data-analysis blocks to build pipelines that generate executable Python code — powered by [Google Blockly](https://developers.google.com/blockly) and pandas.
 
-## Blockly
+Inspired by [Greg Wilson's tidyblocks](https://github.com/gvwilson/tidyblocks), a block-based tool for tidy data analysis.
+Built on top of [QuantStack/jupyterlab-blockly](https://github.com/QuantStack/jupyterlab-blockly), a Blockly editor extension for JupyterLab.
 
-Blockly is a library from Google for building beginner-friendly block-based programming languages.
+## Features
 
-Docs: https://developers.google.com/blockly/guides/overview
-Repo: https://github.com/google/blockly
+- Visual block-based pipeline builder inside JupyterLab
+- Tidy-data transform blocks: filter, select, group, summarize, join, and more
+- Plot blocks (bar, scatter, histogram, …) via plotly.express
+- Statistics blocks (t-test, k-means, …) via scipy/sklearn
+- Multiple kernel support: Python, JavaScript, Lua
+- Extensible via `IBlocklyRegistry` plugin token
 
 ## Requirements
 
-- JupyterLab >= 4.0.0
+- JupyterLab >= 4.6.0
+- Python >= 3.8
 
 ## Install
 
-To install the extension, execute:
-
 ```bash
-conda install -c conda-forge jupyterlab-blockly
-```
-or 
-```bash
-pip install jupyterlab-blockly
+pip install jupyter-tidyblocks
 ```
 
-#### Kernels
+or via conda-forge (once published):
 
-- ipykernel
+```bash
+conda install -c conda-forge jupyter-tidyblocks
+```
+
+### Supported kernels
+
+- ipykernel (Python)
 - xeus-python
 - xeus-lua
-- [JavaScript](https://github.com/n-riesco/ijavascript#installation)
-- [JavaScript](https://github.com/yunabe/tslab)
+- [ijavascript](https://github.com/n-riesco/ijavascript#installation)
+- [tslab](https://github.com/yunabe/tslab)
 
 ## Uninstall
 
-To remove the extension, execute:
-
 ```bash
-conda uninstall -c conda-forge jupyterlab-blockly
-```
-or
-```bash
-pip install jupyterlab-blockly
+pip uninstall jupyter-tidyblocks
 ```
 
 ## Contributing
 
 ### Development install
 
-Note: You will need NodeJS to build the extension package.
-
-The `jlpm` command is JupyterLab's pinned version of
-[yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
-`yarn` or `npm` in lieu of `jlpm` below.
-
 ```bash
-micromamba create -n blockly -c conda-forge python nodejs=18 pre-commit jupyterlab jupyter-packaging jupyterlab-language-pack-es-ES jupyterlab-language-pack-fr-FR ipykernel xeus-python xeus-lua
-micromamba activate blockly
-# Clone the repo to your local environment
-# Change directory to the jupyterlab_blockly directory
-# Installing pre-commit to run command when adding commits
+micromamba create -n tidyblocks -c conda-forge python nodejs pre-commit jupyterlab ipykernel
+micromamba activate tidyblocks
+git clone https://github.com/teonbrooks/jupyter-tidyblocks
+cd jupyter-tidyblocks
 pre-commit install
-# Install package in development mode
 pip install -e ".[dev]"
-# Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
-# Rebuild extension Typescript source after making changes
 jlpm build
 ```
 
-You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
+Watch mode (two terminals):
 
 ```bash
-# Watch the source directory in one terminal, automatically rebuilding when needed
+# Terminal 1 — rebuild on source changes
 jlpm watch
-# Run JupyterLab in another terminal
+
+# Terminal 2 — run JupyterLab
 jupyter lab
-```
-
-With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
-
-By default, the `jlpm build` command generates the source maps for this extension to make it easier to debug using the browser dev tools. To also generate source maps for the JupyterLab core extensions, you can run the following command:
-
-```bash
-jupyter lab build --minimize=False
 ```
 
 ### Development uninstall
 
 ```bash
-pip uninstall jupyterlab_blockly
+pip uninstall jupyter-tidyblocks
 ```
 
-In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `jupyterlab-blockly` within that folder.
+Remove the symlink created by `jupyter labextension develop`:
 
-### Packaging the extension
+```bash
+jupyter labextension list   # find labextensions folder
+# remove jupyter-tidyblocks symlink from that folder
+```
 
-See [RELEASE](RELEASE.md)
+### Packaging
+
+See [RELEASE.md](RELEASE.md).

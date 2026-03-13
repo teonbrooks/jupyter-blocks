@@ -1,14 +1,14 @@
-.. jupyterlab-blockly documentation master file, created by
-   sphinx-quickstart on Tue Jul 12 16:36:37 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. jupyter-tidyblocks documentation master file
 
-Welcome to jupyterlab-blockly's documentation!
-=================================================
+Welcome to jupyter-tidyblocks!
+================================
 
-This JupyterLab extension brings block-based programming directly to your web browser. You can easily use the JupyterLab-Blockly editor and choose from a wide selections of blocks to start coding, see the output of your code and, most importantly, visualize the code transformed in the chosen classical programming language. 
+jupyter-tidyblocks is a JupyterLab extension for tidy data analysis using drag-and-drop Blockly blocks.
+Build data pipelines visually — filter, group, summarize, plot — and see the generated Python code execute live in your kernel.
 
-The extension uses `Blockly <https://developers.google.com/blockly>`_, an open source library designed by Google. 
+The extension uses `Blockly <https://developers.google.com/blockly>`_, an open source library designed by Google.
+It is inspired by `tidyblocks <https://github.com/gvwilson/tidyblocks>`_ by Greg Wilson, a block-based tool for tidy data analysis,
+and is a fork of `jupyterlab-blockly <https://github.com/QuantStack/jupyterlab-blockly>`_ by QuantStack.
 
 .. image:: _static/OverviewBlockly.gif
    :alt: Functionality of extension
@@ -17,13 +17,14 @@ Try it directly in your browser using JupyterLite!
 
 .. jupyterlite:: example.jpblockly
    :width: 100%
-   :height: 600ptx
+   :height: 600px
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    installation
+   getting-started
 
 .. toctree::
    :maxdepth: 2
@@ -41,6 +42,14 @@ Try it directly in your browser using JupyterLite!
    :caption: Expanding:
 
    other_extensions
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Project:
+
+   jupyterlab-blockly_architecture
+   tidyblocks-features
+   modernization-plan
 
 Indices and tables
 ==================

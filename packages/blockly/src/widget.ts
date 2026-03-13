@@ -83,6 +83,7 @@ export namespace BlocklyEditor {
 export class BlocklyPanel extends SplitPanel {
   private _context: DocumentRegistry.IContext<DocumentModel>;
   private _rendermime: IRenderMimeRegistry;
+  private _manager: BlocklyManager;
 
   /**
    * Construct a `BlocklyPanel`.
@@ -106,11 +107,19 @@ export class BlocklyPanel extends SplitPanel {
     this.addClass('jp-BlocklyPanel');
     this._context = context;
     this._rendermime = rendermime;
+    this._manager = manager;
 
     // Load the content of the file when the context is ready
     this._context.ready.then(() => this._load());
     // Connect to the save signal
     this._context.saveState.connect(this._onSave, this);
+  }
+
+  /*
+   * The BlocklyManager for this panel.
+   */
+  get manager(): BlocklyManager {
+    return this._manager;
   }
 
   /*

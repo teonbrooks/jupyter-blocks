@@ -1,6 +1,6 @@
 import { ISessionContext } from '@jupyterlab/apputils';
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
-import { KernelSpec, KernelConnection } from '@jupyterlab/services';
+import { KernelSpec, Kernel } from '@jupyterlab/services';
 import { IChangedArgs } from '@jupyterlab/coreutils';
 
 import { ISignal, Signal } from '@lumino/signaling';
@@ -11,21 +11,44 @@ import { BlocklyRegistry } from './registry';
 import { ToolboxDefinition } from 'blockly/core/utils/toolbox';
 
 /**
- * BlocklyManager the manager for each document
- * to select the toolbox and the generator that the
- * user wants to use on a specific document.
+ * BlocklyManager is the per-document controller that bridges the
+ * `BlocklyRegistry` (shared, extension-wide) with an individual
+ * `.jpblockly` file's session context.
+ *
+ * Each open document gets its own `BlocklyManager` so that different
+ * documents can independently choose their toolbox (via the toolbar
+ * dropdown) and track which kernel — and therefore which code generator —
+ * is active for that document.
+ *
+ * When the kernel changes (user selects a different kernel spec), the
+ * manager emits a `'kernel'` change signal and switches to the matching
+ * generator. When the user picks a different toolbox, it emits `'toolbox'`.
+ * The `BlocklyLayout` listens to both and updates the workspace accordingly.
  */
 export class BlocklyManager {
+  // Name key into `_registry.toolboxes` for the currently selected toolbox.
   private _toolbox: string;
+  // The Blockly generator used to convert workspace blocks to source code.
+  // Swapped automatically when the active kernel language changes.
   private _generator: Blockly.Generator;
   private _registry: BlocklyRegistry;
+  // KernelSpec for the currently connected kernel; null until first connection.
   private _selectedKernel: KernelSpec.ISpecModel;
   private _sessionContext: ISessionContext;
+  // Used to derive the CodeMirror mimeType for syntax highlighting in the
+  // code-preview cell.
   private _mimetypeService: IEditorMimeTypeService;
   private _changed: Signal<this, BlocklyManager.Change>;
 
   /**
    * Constructor of BlocklyManager.
+   *
+   * @param registry  The shared extension-level registry of toolboxes and
+   *                  generators.
+   * @param sessionContext  The kernel session for this document. Used to
+   *                  detect kernel changes and to execute generated code.
+   * @param mimetypeService  Resolves a kernel language name to a CodeMirror
+   *                  mimeType for syntax-highlighted code preview.
    */
   constructor(
     registry: BlocklyRegistry,
@@ -36,10 +59,18 @@ export class BlocklyManager {
     this._sessionContext = sessionContext;
     this._mimetypeService = mimetypeService;
 
-    this._toolbox = 'default';
+    // Default to the first non-default toolbox if one has been registered
+    // (e.g. 'Tidy Data'), otherwise fall back to 'default'.
+    const registered = [...this._registry.toolboxes.keys()].find(
+      k => k !== 'default'
+    );
+    this._toolbox = registered ?? 'default';
+    // Default to Python; switches automatically when the kernel changes.
     this._generator = this._registry.generators.get('python');
 
     this._changed = new Signal<this, BlocklyManager.Change>(this);
+    // Watch for the user selecting a different kernel so we can switch the
+    // active generator and update the mimeType for syntax highlighting.
     this._sessionContext.kernelChanged.connect(this._onKernelChanged, this);
   }
 
@@ -157,7 +188,11 @@ export class BlocklyManager {
 
   private _onKernelChanged(
     sender: ISessionContext,
-    args: IChangedArgs<KernelConnection, KernelConnection, 'kernel'>
+    args: IChangedArgs<
+      Kernel.IKernelConnection | null,
+      Kernel.IKernelConnection | null,
+      'kernel'
+    >
   ): void {
     const specs = this._sessionContext.specsManager.specs.kernelspecs;
     if (args.newValue && specs[args.newValue.name] !== undefined) {

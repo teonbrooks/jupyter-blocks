@@ -1,14 +1,14 @@
 {
-  "name": "jupyter-tidyblocks",
+  "name": "jupyter-tidyblocks-blocks",
   "version": "0.1.0",
-  "description": "Tidy data analysis with Blockly blocks for JupyterLab — core library.",
+  "description": "Tidy data analysis blocks for jupyter-tidyblocks.",
   "keywords": [
     "blockly",
     "jupyter",
     "jupyterlab",
-    "jupyterlab-extension",
     "tidy-data",
-    "data-analysis"
+    "data-analysis",
+    "pandas"
   ],
   "homepage": "https://github.com/teonbrooks/jupyter-tidyblocks",
   "bugs": {
@@ -20,8 +20,8 @@
     "email": "teon.brooks@gmail.com"
   },
   "files": [
-    "lib/**/*.{cjs,mjs,d.ts,d.ts.map,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-    "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+    "lib/**/*.{cjs,mjs,d.ts,d.ts.map,json}",
+    "style/**/*.{css,js,json}"
   ],
   "main": "lib/index.cjs",
   "module": "lib/index.mjs",
@@ -32,7 +32,6 @@
       "require": "./lib/index.cjs"
     }
   },
-  "style": "style/index.css",
   "repository": {
     "type": "git",
     "url": "https://github.com/teonbrooks/jupyter-tidyblocks"
@@ -40,36 +39,19 @@
   "scripts": {
     "build": "vite build",
     "build:prod": "vite build --mode production",
-    "clean": "jlpm clean:lib",
-    "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
-    "clean:all": "jlpm clean:lib",
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "clean:all": "rimraf lib tsconfig.tsbuildinfo",
     "install:extension": "jlpm build",
     "test": "vitest run",
     "test:watch": "vitest",
     "watch": "vite build --watch"
   },
   "dependencies": {
-    "@blockly/field-colour": "^6.0.0",
-    "@jupyterlab/apputils": "^4.5",
-    "@jupyterlab/cells": "^4.5",
-    "@jupyterlab/codeeditor": "^4.5",
-    "@jupyterlab/codemirror": "^4.5",
-    "@jupyterlab/coreutils": "^5.6",
-    "@jupyterlab/docregistry": "^4.5",
-    "@jupyterlab/rendermime": "^4.5",
-    "@jupyterlab/services": "^7.0",
-    "@jupyterlab/ui-components": "^4.5",
-    "@lumino/coreutils": "^2.2",
-    "@lumino/messaging": "^2.0",
-    "@lumino/signaling": "^2.1",
-    "@lumino/widgets": "^2.1",
     "blockly": "^12.0",
-    "react": "^19.0",
-    "react-dom": "^19.0"
+    "jupyter-tidyblocks": "^0.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/react": "^16.0.0",
     "@vitejs/plugin-react": "^4.0.0",
     "jsdom": "^25.0.0",
     "rimraf": "^6.0.0",
@@ -78,11 +60,6 @@
     "vite-plugin-dts": "^4.0.0",
     "vitest": "^3.0.0"
   },
-  "sideEffects": [
-    "style/*.css",
-    "style/index.js"
-  ],
-  "styleModule": "style/index.js",
   "publishConfig": {
     "access": "public"
   }
