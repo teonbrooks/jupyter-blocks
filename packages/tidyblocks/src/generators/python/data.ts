@@ -32,6 +32,18 @@ pythonGenerator.forBlock['tidyblocks_data_user'] = block => {
   return `_df = ${name}.copy()\n`;
 };
 
+pythonGenerator.forBlock['tidyblocks_data_iris'] = () => {
+  return "_df = sns.load_dataset('iris')\n";
+};
+
+pythonGenerator.forBlock['tidyblocks_data_titanic'] = () => {
+  return "_df = sns.load_dataset('titanic')\n";
+};
+
+pythonGenerator.forBlock['tidyblocks_data_gapminder'] = () => {
+  return "_df = px.data.gapminder()\n";
+};
+
 pythonGenerator.forBlock['tidyblocks_data_csv'] = block => {
   const path = block.getFieldValue('PATH');
   return `_df = pd.read_csv('${path}')\n`;

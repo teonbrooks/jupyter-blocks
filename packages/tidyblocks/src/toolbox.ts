@@ -14,6 +14,9 @@ export const TIDYBLOCKS_TOOLBOX = {
       colour: '#FEBE4C',
       contents: [
         { kind: 'block', type: 'tidyblocks_data_penguins' },
+        { kind: 'block', type: 'tidyblocks_data_iris' },
+        { kind: 'block', type: 'tidyblocks_data_titanic' },
+        { kind: 'block', type: 'tidyblocks_data_gapminder' },
         { kind: 'block', type: 'tidyblocks_data_colors' },
         { kind: 'block', type: 'tidyblocks_data_earthquakes' },
         {

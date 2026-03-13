@@ -18,6 +18,9 @@ have no top connector (nothing chains into them).
 | Block label | Block type | dplyr equivalent | What it does | Python generated |
 |---|---|---|---|---|
 | penguins dataset | `tidyblocks_data_penguins` | — | Palmer Penguins dataset loaded via seaborn | `_df = sns.load_dataset('penguins')` |
+| iris dataset | `tidyblocks_data_iris` | — | Fisher iris dataset: sepal/petal measurements for 3 species (via seaborn) | `_df = sns.load_dataset('iris')` |
+| titanic dataset | `tidyblocks_data_titanic` | — | Titanic passenger survival dataset (via seaborn) | `_df = sns.load_dataset('titanic')` |
+| gapminder dataset | `tidyblocks_data_gapminder` | — | Gapminder life expectancy / GDP dataset across countries and years (via plotly.express) | `_df = px.data.gapminder()` |
 | colors dataset | `tidyblocks_data_colors` | — | Built-in table of 11 colors with RGB values | `_df = pd.DataFrame({...})` |
 | earthquakes dataset | `tidyblocks_data_earthquakes` | — | 2016 global earthquake data from gvwilson/tidyblocks | `_df = pd.read_csv('<url>')` |
 | sequence 1 to N as col | `tidyblocks_data_sequence` | — | Integer sequence 1..N in a named column | `_df = pd.DataFrame({'col': range(1, N+1)})` |
