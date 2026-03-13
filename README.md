@@ -20,7 +20,7 @@ Built on top of [QuantStack/jupyterlab-blockly](https://github.com/QuantStack/ju
 
 ## Requirements
 
-- JupyterLab >= 4.6.0
+- JupyterLab >= 4.5
 - Python >= 3.8
 
 ## Install

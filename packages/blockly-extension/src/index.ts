@@ -100,8 +100,6 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
     mainMenu: IMainMenu | null,
     widgetRegistry: IJupyterWidgetRegistry | null
   ): IBlocklyRegistry => {
-    console.log('JupyterLab extension jupyterlab-blocky is activated!');
-
     // Namespace for the tracker
     const namespace = 'jupyterlab-blocky';
 
@@ -195,7 +193,7 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
           ? 'En'
           : currentLocale[currentLocale.length - 2].toUpperCase() +
             currentLocale[currentLocale.length - 1].toLowerCase();
-      console.log(`Current Language : '${language}'`);
+
 
       // Transmitting the current language to the manager.
       widgetFactory.registry.setlanguage(language);

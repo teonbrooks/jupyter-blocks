@@ -1,7 +1,7 @@
 {
   "name": "jupyter-tidyblocks-root",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.0dev",
   "description": "Tidy data analysis with Blockly blocks for JupyterLab.",
   "keywords": [
     "jupyter",

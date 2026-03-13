@@ -128,3 +128,6 @@ jupyterlab_blockly/_version.py
 /.turbo
 /jupyter_tidyblocks/labextension/static
 .yarn/install-state.gz
+.yarn/*
+*.log
+/packages/blockly/.turbo

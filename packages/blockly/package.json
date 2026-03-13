@@ -1,6 +1,6 @@
 {
   "name": "jupyter-tidyblocks",
-  "version": "0.1.0",
+  "version": "0.1.0dev",
   "description": "Tidy data analysis with Blockly blocks for JupyterLab — core library.",
   "keywords": [
     "blockly",

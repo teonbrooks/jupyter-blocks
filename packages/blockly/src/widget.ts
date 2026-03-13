@@ -29,9 +29,6 @@ export class BlocklyEditor extends DocumentWidget<BlocklyPanel, DocumentModel> {
   constructor(options: BlocklyEditor.IOptions) {
     super(options);
 
-    // Loading the ITranslator
-    // const trans = this.translator.load('jupyterlab');
-
     // Create and add a button to the toolbar to execute
     // the code.
     const button = new BlocklyButton({
@@ -47,7 +44,7 @@ export class BlocklyEditor extends DocumentWidget<BlocklyPanel, DocumentModel> {
       'toolbox',
       new SelectToolbox({
         label: 'Toolbox',
-        tooltip: 'Select tollbox',
+        tooltip: 'Select toolbox',
         manager: options.manager
       })
     );

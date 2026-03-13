@@ -1,6 +1,6 @@
 {
   "name": "jupyter-tidyblocks-extension",
-  "version": "0.1.0",
+  "version": "0.1.0dev",
   "description": "Tidy data analysis with Blockly blocks for JupyterLab — extension plugin.",
   "keywords": [
     "jupyter",
@@ -59,8 +59,8 @@
     "@jupyterlab/settingregistry": "^4.5",
     "@jupyterlab/translation": "^4.5",
     "@jupyterlab/ui-components": "^4.5",
-    "jupyter-tidyblocks": "^0.1.0",
-    "jupyter-tidyblocks-blocks": "^0.1.0"
+    "jupyter-tidyblocks": "^0.1.0dev",
+    "jupyter-tidyblocks-blocks": "^0.1.0dev"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.5",
