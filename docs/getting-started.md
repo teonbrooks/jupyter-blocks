@@ -38,15 +38,12 @@ pip install jupyter_tidyblocks
 git clone https://github.com/teonbrooks/jupyter-tidyblocks.git
 cd jupyter-tidyblocks
 
-# 2. Install Node.js dependencies and build the JS packages
-# (requires Node >= 18 and yarn/jlpm)
-jlpm install
-jlpm build
-
-# 3. Install the Python package in editable mode
+# 2. Install the Python package and build the JS packages
 pip install -e ".[dev]"
+jupyter labextension develop . --overwrite
+npm run build
 
-# 4. Verify the extension is registered
+# 3. Verify the extension is registered
 jupyter labextension list
 ```
 
@@ -154,13 +151,13 @@ associated kernel state are preserved.
 
 | Category | Color | Purpose | Example blocks |
 |---|---|---|---|
-| **Data** | Gold | Load a dataset to start a pipeline | Penguins, Colors, CSV, Sequence, User variable |
-| **Transform** | Blue | Reshape or filter `_df` | filter, select, groupby, summarize, sort, bin, sample |
-| **Combine** | Grey | Merge two pipelines | join, glue (concat), cross_join |
+| **Data** | Gold | Load a dataset to start a pipeline | penguins, iris, titanic, gapminder, colors, CSV, sequence, user variable |
+| **Transform** | Blue | Reshape or filter `_df` | filter, select, mutate, arrange, groupby, summarize, count, distinct, bin, slice_head, slice_tail, slice_sample, slice_min, slice_max, relocate |
+| **Combine** | Grey | Merge two pipelines | join, semi_join, anti_join, bind_rows, bind_cols, cross_join |
 | **Plot** | Green | Visualize and terminate a pipeline | scatter, bar, histogram, line, box, violin, heatmap |
 | **Stats** | Purple | Statistical tests and summaries | t-test, k-means, correlation, describe |
 | **Value** | Red | Produce a value (column ref, literal, distribution) | column, number, text, datetime, normal, uniform |
-| **Op** | Pink | Transform a value | arithmetic, compare, logic, ifelse, string, shift |
+| **Op** | Pink | Transform a value | arithmetic, compare, between, logic, ifelse, coalesce, n_distinct, string, shift |
 
 > **Pipeline shape**: every pipeline starts with a **Data** block (no left
 > connector), passes through zero or more **Transform** / **Combine** blocks
@@ -235,16 +232,16 @@ After making changes to the TypeScript source:
 
 ```bash
 # Rebuild all packages
-jlpm build
+npm run build
 
 # Or watch for changes (rebuilds automatically, then refresh JupyterLab)
-jlpm watch
+npm run watch
 ```
 
 To run unit tests:
 
 ```bash
-jlpm test
+npm test
 ```
 
 To rebuild and reinstall the labextension into JupyterLab's static assets

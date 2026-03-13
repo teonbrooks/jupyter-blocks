@@ -74,13 +74,29 @@ Inspired by [Greg Wilson's tidyblocks](https://github.com/gvwilson/tidyblocks).
 - Migrated from Yarn 4 to npm; `yarn.lock` / `.yarnrc.yml` / `.yarn/` removed; `"resolutions"` → `"overrides"`; `jlpm` replaced with `npm run` in all scripts
 - `yarn.lock` added to `.gitignore` (regenerated as a build side-effect by `@jupyterlab/builder`'s bundled jlpm)
 
+### Built-in datasets
+
+Three new built-in datasets added to the **Data** category:
+
+- **iris** — Fisher iris dataset (sepal/petal measurements for 3 species) via `sns.load_dataset('iris')`
+- **titanic** — Titanic passenger survival dataset via `sns.load_dataset('titanic')`
+- **gapminder** — Life expectancy / GDP across countries and years via `px.data.gapminder()`
+
+No new dependencies required — iris and titanic use the existing seaborn import;
+gapminder uses the existing plotly.express import.
+
 ### Docs
 
 - `docs/getting-started.md`: step-by-step guide for installing and testing the extension in JupyterLab
 - `docs/architecture.md`: full architecture reference (package layout, data-flow, extension points)
 - `docs/blocks-reference.md`: complete block reference with dplyr mapping, description, and generated Python for every block
+- `docs/custom-blocks.md`: step-by-step tutorial for adding custom blocks and toolboxes
 - `docs/work-summary.md`: narrative summary of all engineering work done in this release
 - `docs/modernization-plan.md`: full modernization plan with phase-by-phase status
+- `docs/installation.md`: updated to use npm commands and correct package name
+- `docs/other_extensions.md`: updated to reference `jupyter-tidyblocks` package and point to `custom-blocks.md`
+- `docs/toolbox.md`: updated with correct category list and colours
+- `docs/index.rst`: TOC updated to include all new docs
 - `README.md`: rewritten; credits Greg Wilson's tidyblocks and QuantStack/jupyterlab-blockly
 
 <!-- <END NEW CHANGELOG ENTRY> -->

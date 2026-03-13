@@ -21,7 +21,7 @@ Try it directly in your browser using JupyterLite!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Getting Started:
 
    installation
    getting-started
@@ -39,17 +39,32 @@ Try it directly in your browser using JupyterLite!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Expanding:
+   :caption: Block Reference:
+
+   blocks-reference
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Extending:
 
    other_extensions
+   custom-blocks
 
 .. toctree::
    :maxdepth: 2
    :caption: Project:
 
-   jupyterlab-blockly_architecture
-   tidyblocks-features
+   architecture
+   jupyter-tidyblocks-features
    modernization-plan
+   work-summary
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Inspirations:
+
+   inspirations/tidyblocks-features
+   inspirations/jupyterlab-blockly_architecture
 
 Indices and tables
 ==================

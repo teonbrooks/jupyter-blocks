@@ -2,90 +2,75 @@
 
 ## Requirements
 
-- JupyterLab >= 4.0.0
+- Python >= 3.8
+- JupyterLab >= 4.5
 
 ## Install
 
-To install the extension, execute:
-
 ```bash
-conda install -c conda-forge jupyterlab-blockly
+pip install jupyter-tidyblocks
 ```
 
-or
+### Supported kernels
 
-```bash
-pip install jupyterlab-blockly
-```
-
-### Kernels
-
-- ipykernel
+- ipykernel (Python)
 - xeus-python
 - xeus-lua
-- [JavaScript](https://github.com/n-riesco/ijavascript#installation)
-- [JavaScript](https://github.com/yunabe/tslab)
+- [ijavascript](https://github.com/n-riesco/ijavascript#installation)
+- [tslab](https://github.com/yunabe/tslab)
 
 ## Uninstall
 
-To remove the extension, execute:
-
 ```bash
-conda uninstall -c conda-forge jupyterlab-blockly
-```
-
-or 
-
-```bash
-pip uninstall jupyterlab-blockly
+pip uninstall jupyter-tidyblocks
 ```
 
 ## Development install
 
-**Note:** You will need NodeJS to build the extension package.
-
-The `jlpm` command is JupyterLab's pinned version of
-[yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
-`yarn` or `npm` in lieu of `jlpm` below.
+**Note:** You will need Node.js >= 18 to build the extension.
 
 ```bash
-micromamba create -n blockly -c conda-forge python nodejs=18 yarn pre-commit jupyterla jupyterlab-language-pack-es-ES jupyterlab-language-pack-fr-FR ipykernel xeus-python xeus-lua
-micromamba activate blockly
-# Clone the repo to your local environment
-# Change directory to the jupyterlab_blockly directory
-# Install package in development mode
-pip install -e ".[dev]"
-# Installing pre-commit to run command when adding commits
+# Create and activate a conda environment
+micromamba create -n tidyblocks -c conda-forge python nodejs pre-commit jupyterlab ipykernel
+micromamba activate tidyblocks
+
+# Clone the repo
+git clone https://github.com/teonbrooks/jupyter-tidyblocks
+cd jupyter-tidyblocks
+
+# Install pre-commit hooks
 pre-commit install
-# Link your development version of the extension with JupyterLab
+
+# Install the Python package in editable mode and build the JS packages
+pip install -e ".[dev]"
 jupyter labextension develop . --overwrite
-# Rebuild extension Typescript source after making changes
-jlpm build
+npm run build
 ```
 
-You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
+You can watch the source directory and run JupyterLab at the same time in
+different terminals to watch for changes and automatically rebuild:
 
 ```bash
-# Watch the source directory in one terminal, automatically rebuilding when needed
-jlpm watch
-# Run JupyterLab in another terminal
+# Terminal 1 — rebuild on source changes
+npm run watch
+
+# Terminal 2 — run JupyterLab
 jupyter lab
 ```
 
-With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
-
-By default, the `jlpm build` command generates the source maps for this extension to make it easier to debug using the browser dev tools. To also generate source maps for the JupyterLab core extensions, you can run the following command:
-
-```bash
-jupyter lab build --minimize=False
-```
+With the watch command running, every saved change will immediately be built
+locally and available in your running JupyterLab. Refresh the browser to load
+the change (you may need to wait several seconds for the rebuild to finish).
 
 ## Development uninstall
 
 ```bash
-pip uninstall jupyterlab_blockly
+pip uninstall jupyter-tidyblocks
 ```
 
-In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `jupyterlab-blockly` within that folder.
+Remove the symlink created by `jupyter labextension develop`:
+
+```bash
+jupyter labextension list   # find the labextensions folder
+# remove the jupyter-tidyblocks-extension symlink from that folder
+```

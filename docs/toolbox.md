@@ -1,15 +1,41 @@
 # Toolbox
 
-The toolbox, a main element of the Blockly editor, is situated on the left side of the screen. It encompasses all available blocks, organized in categories for easier access.
+The toolbox is the panel on the left side of the Blockly editor. It contains all
+available blocks organized into categories.
 
 <p align="center">
   <img src="_static/toolboxView.gif" alt="Toolbox View"/>
 </p>
 
-## Switching to another toolbox
+## Tidy Data toolbox
 
-If you have installed or created another extension, on top of the JupyterLab-Blockly extension, which includes a new tooolbox, you can switch to it by simply pressing the drop down menu on the upper-right corner.
+When a `.jpblockly` file is opened with the **Tidy Data** toolbox selected (the
+default), the sidebar shows seven categories:
+
+| Category | Colour | Purpose |
+|---|---|---|
+| **Data** | Gold `#FEBE4C` | Source blocks that load a dataset into `_df` |
+| **Transform** | Blue `#76AADB` | Row/column operations on `_df` |
+| **Combine** | Grey `#808080` | Multi-table joins and stacks |
+| **Plot** | Green `#A4C588` | Visualizations that render `_df` |
+| **Stats** | Purple `#BA93DB` | Statistical tests and summaries |
+| **Values** | Red `#E7553C` | Literal values and column references |
+| **Operations** | Pink `#F9B5B2` | Expressions (arithmetic, logic, string, …) |
+
+For a full list of every block in each category, see
+[Block Reference](blocks-reference.md).
+
+## Switching toolboxes
+
+If another extension has registered an additional toolbox, you can switch to it
+using the **Toolbox** dropdown in the editor toolbar (upper-right area of the
+editor panel).
 
 ![Switch Toolbox](_static/toolboxSwitch.png)
 
-**NOTE** : The toolbox `niryo` from the image above is part of the JupyterLab-Niryo-One extension, which is built on top of the JupyterLab-Blockly extesnion and is meant to offer blocks which can control the Niryo One robot. You can read more about it on its [Github repository](https://github.com/QuantStack/jupyterlab-niryo-one).
+## Adding your own toolbox
+
+You can register a custom toolbox from a JupyterLab plugin using
+`IBlocklyRegistry.registerToolbox(name, definition)`. Once registered it appears
+automatically in the dropdown. See [Extending jupyter-tidyblocks](other_extensions.md)
+and [Adding Custom Blocks](custom-blocks.md) for a full guide.
