@@ -9,8 +9,28 @@ Inspired by [Greg Wilson's tidyblocks](https://github.com/gvwilson/tidyblocks).
 
 ### New features
 
-- **`packages/tidyblocks`**: new monorepo package providing 50+ tidy-data analysis blocks organized into seven categories — Data, Transform, Combine, Plot, Stats, Value, and Op — with Python (pandas / plotly.express / scipy / sklearn) code generators
+- **`packages/tidyblocks`**: new monorepo package providing 60+ tidy-data analysis blocks organized into seven categories — Data, Transform, Combine, Plot, Stats, Values, and Operations — with Python (pandas / plotly.express / scipy / sklearn) code generators
 - Exports `registerTidyblocks(registry)` for registering all blocks and the Tidy Data toolbox with any `IBlocklyRegistry` instance
+- Block names aligned with [dplyr (tidyverse)](https://dplyr.tidyverse.org/) conventions; 7 blocks renamed and 10 new blocks added (see below)
+
+#### dplyr alignment — renames
+
+| Old | New | dplyr verb |
+|---|---|---|
+| create column | mutate | `mutate()` |
+| sort by | arrange by | `arrange()` |
+| unique by | distinct by | `distinct()` |
+| first N rows | slice_head | `slice_head()` |
+| last N rows | slice_tail | `slice_tail()` |
+| sample N rows | slice_sample | `slice_sample()` |
+| glue with | bind_rows with | `bind_rows()` |
+
+#### dplyr alignment — new blocks
+
+- **Transform**: `count()`, `relocate()`, `slice_min()`, `slice_max()`
+- **Combine**: `semi_join()`, `anti_join()`, `bind_cols()`
+- **Operations**: `between()`, `coalesce()`, `n_distinct()`
+- **summarize** block: added `n distinct` aggregate function option
 
 ### Rebrand & metadata
 
@@ -49,10 +69,17 @@ Inspired by [Greg Wilson's tidyblocks](https://github.com/gvwilson/tidyblocks).
 - `packages/tidyblocks/src/index.ts`: `registry.addToolbox` → `registry.registerToolbox` (correct method name on `IBlocklyRegistry`)
 - Root `tsconfig.json`: added `"lib": ["ES2020", "DOM"]` to resolve `Intl.ResolvedRelativeTimeFormatOptions` error from `@jupyterlab/coreutils`
 
+### Package manager
+
+- Migrated from Yarn 4 to npm; `yarn.lock` / `.yarnrc.yml` / `.yarn/` removed; `"resolutions"` → `"overrides"`; `jlpm` replaced with `npm run` in all scripts
+- `yarn.lock` added to `.gitignore` (regenerated as a build side-effect by `@jupyterlab/builder`'s bundled jlpm)
+
 ### Docs
 
-- `docs/jupyterlab-blockly_architecture.md`: full architecture document (refers to the upstream project as `jupyterlab-blockly`)
-- `docs/tidyblocks-features.md`: feature inventory and port plan from gvwilson/tidyblocks
+- `docs/getting-started.md`: step-by-step guide for installing and testing the extension in JupyterLab
+- `docs/architecture.md`: full architecture reference (package layout, data-flow, extension points)
+- `docs/blocks-reference.md`: complete block reference with dplyr mapping, description, and generated Python for every block
+- `docs/work-summary.md`: narrative summary of all engineering work done in this release
 - `docs/modernization-plan.md`: full modernization plan with phase-by-phase status
 - `README.md`: rewritten; credits Greg Wilson's tidyblocks and QuantStack/jupyterlab-blockly
 

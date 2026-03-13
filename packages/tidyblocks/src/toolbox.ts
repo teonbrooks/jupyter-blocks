@@ -1,6 +1,9 @@
 /**
  * Blockly toolbox definition for all jupyter-tidyblocks tidy-data blocks.
  * Color palette matches the original tidyblocks project by Greg Wilson.
+ *
+ * Block naming follows dplyr (tidyverse) conventions where an equivalent
+ * dplyr verb exists.
  */
 export const TIDYBLOCKS_TOOLBOX = {
   kind: 'categoryToolbox',
@@ -38,21 +41,25 @@ export const TIDYBLOCKS_TOOLBOX = {
         { kind: 'block', type: 'tidyblocks_transform_filter' },
         { kind: 'block', type: 'tidyblocks_transform_select' },
         { kind: 'block', type: 'tidyblocks_transform_drop' },
-        { kind: 'block', type: 'tidyblocks_transform_create' },
+        { kind: 'block', type: 'tidyblocks_transform_mutate' },       // was: create
         { kind: 'block', type: 'tidyblocks_transform_rename' },
-        { kind: 'block', type: 'tidyblocks_transform_sort' },
-        { kind: 'block', type: 'tidyblocks_transform_unique' },
+        { kind: 'block', type: 'tidyblocks_transform_relocate' },     // new: dplyr relocate()
+        { kind: 'block', type: 'tidyblocks_transform_arrange' },      // was: sort
+        { kind: 'block', type: 'tidyblocks_transform_distinct' },     // was: unique
         { kind: 'block', type: 'tidyblocks_transform_groupby' },
         { kind: 'block', type: 'tidyblocks_transform_ungroup' },
         { kind: 'block', type: 'tidyblocks_transform_summarize' },
+        { kind: 'block', type: 'tidyblocks_transform_count' },        // new: dplyr count()
         { kind: 'block', type: 'tidyblocks_transform_running' },
         { kind: 'block', type: 'tidyblocks_transform_bin' },
         { kind: 'block', type: 'tidyblocks_transform_saveas' },
         { kind: 'block', type: 'tidyblocks_transform_fillna' },
         { kind: 'block', type: 'tidyblocks_transform_dropna' },
-        { kind: 'block', type: 'tidyblocks_transform_sample' },
-        { kind: 'block', type: 'tidyblocks_transform_head' },
-        { kind: 'block', type: 'tidyblocks_transform_tail' },
+        { kind: 'block', type: 'tidyblocks_transform_slice_sample' }, // was: sample
+        { kind: 'block', type: 'tidyblocks_transform_slice_head' },   // was: head
+        { kind: 'block', type: 'tidyblocks_transform_slice_tail' },   // was: tail
+        { kind: 'block', type: 'tidyblocks_transform_slice_min' },    // new: dplyr slice_min()
+        { kind: 'block', type: 'tidyblocks_transform_slice_max' },    // new: dplyr slice_max()
         { kind: 'block', type: 'tidyblocks_transform_display' }
       ]
     },
@@ -62,7 +69,10 @@ export const TIDYBLOCKS_TOOLBOX = {
       colour: '#808080',
       contents: [
         { kind: 'block', type: 'tidyblocks_combine_join' },
-        { kind: 'block', type: 'tidyblocks_combine_glue' },
+        { kind: 'block', type: 'tidyblocks_combine_semi_join' },      // new: dplyr semi_join()
+        { kind: 'block', type: 'tidyblocks_combine_anti_join' },      // new: dplyr anti_join()
+        { kind: 'block', type: 'tidyblocks_combine_bind_rows' },      // was: glue
+        { kind: 'block', type: 'tidyblocks_combine_bind_cols' },      // new: dplyr bind_cols()
         { kind: 'block', type: 'tidyblocks_combine_cross_join' }
       ]
     },
@@ -117,9 +127,12 @@ export const TIDYBLOCKS_TOOLBOX = {
       contents: [
         { kind: 'block', type: 'tidyblocks_op_arithmetic' },
         { kind: 'block', type: 'tidyblocks_op_compare' },
+        { kind: 'block', type: 'tidyblocks_op_between' },             // new: dplyr between()
         { kind: 'block', type: 'tidyblocks_op_logic' },
         { kind: 'block', type: 'tidyblocks_op_not' },
         { kind: 'block', type: 'tidyblocks_op_ifelse' },
+        { kind: 'block', type: 'tidyblocks_op_coalesce' },            // new: dplyr coalesce()
+        { kind: 'block', type: 'tidyblocks_op_n_distinct' },          // new: dplyr n_distinct()
         { kind: 'block', type: 'tidyblocks_op_typecheck' },
         { kind: 'block', type: 'tidyblocks_op_convert' },
         { kind: 'block', type: 'tidyblocks_op_datetime' },

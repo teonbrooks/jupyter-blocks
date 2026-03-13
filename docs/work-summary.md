@@ -211,11 +211,85 @@ Implementation touched three files:
 
 ---
 
-## 11. Documentation
+## 12. npm migration
+
+**Problem:** The project used Yarn 4 (`packageManager: "yarn@4.6.0"`) but a
+stray `package-lock.json` and npm-installed `node_modules` had accumulated
+alongside it, creating an inconsistent state.
+
+**What was done:**
+- Removed `packageManager: "yarn@4.6.0"` and replaced with `"npm@11.1.0"`.
+- Converted `"resolutions"` → `"overrides"` (npm 8.3+ equivalent).
+- Converted `"workspaces"` from Yarn's `{ "packages": [...] }` object form to
+  npm's array form `["packages/*"]`.
+- Replaced all `jlpm` references in `packages/blockly-extension/package.json`
+  scripts with `npm run`.
+- Replaced `jlpm` references in root `lint` / `prettier` scripts with
+  `npm run`.
+- Deleted `.yarnrc.yml`, `.yarn/` cache directory, and `yarn.lock`.
+- Updated `.gitignore` to track `node_modules/`, `package-lock.json`, and
+  `yarn.lock` (the last is a build side-effect from `@jupyterlab/builder`'s
+  bundled `jlpm`, which cannot be avoided).
+
+**Note:** `jlpm` (a yarn shim bundled inside the `jupyterlab` Python package)
+is called internally by `jupyter labextension build` and will always
+regenerate `yarn.lock` during a build. This is an implementation detail of
+`@jupyterlab/builder` that cannot be configured away; the file is gitignored.
+
+---
+
+## 13. dplyr alignment and new blocks
+
+**Motivation:** dplyr (R tidyverse) is the reference vocabulary for tidy-data
+analysis. Aligning block names to dplyr verbs makes the extension more
+intuitive for data scientists familiar with either R or the tidy-data
+paradigm.
+
+### Renames (7 blocks)
+
+| Old block label | New block label | dplyr verb |
+|---|---|---|
+| `create column` | `mutate` | `mutate()` |
+| `sort by` | `arrange by` | `arrange()` |
+| `unique by` | `distinct by` | `distinct()` |
+| `first N rows` | `slice_head N rows` | `slice_head()` |
+| `last N rows` | `slice_tail N rows` | `slice_tail()` |
+| `sample N rows` | `slice_sample N rows` | `slice_sample()` |
+| `glue with` | `bind_rows with` | `bind_rows()` |
+
+Internal block type names were updated to match
+(e.g. `tidyblocks_transform_create` → `tidyblocks_transform_mutate`).
+
+### New blocks (10 blocks)
+
+**Transform**
+- `count by cols` — `count()`: count rows per combination of columns
+- `relocate cols before/after anchor` — `relocate()`: move columns to a new position
+- `slice_min N rows by col` — `slice_min()`: keep N rows with smallest values
+- `slice_max N rows by col` — `slice_max()`: keep N rows with largest values
+
+**Combine**
+- `semi join` — `semi_join()`: filtering join, keep matched rows (no new columns)
+- `anti join` — `anti_join()`: filtering join, keep unmatched rows
+- `bind_cols with` — `bind_cols()`: horizontally bind two DataFrames by column position
+
+**Operations**
+- `between left and right` — `between()`: inclusive range check
+- `coalesce val with replacement` — `coalesce()`: first non-missing value
+- `n_distinct val` — `n_distinct()`: count unique values
+
+Also added `n distinct` as an option to the **summarize** block's function dropdown.
+
+---
+
+## 14. Documentation
+
+(was §11)
 
 | Document | Description |
 |---|---|
 | `docs/getting-started.md` | Step-by-step guide: install, launch JupyterLab, create a `.jpblockly` file, build a penguins pipeline, run it, and see output. |
 | `docs/modernization-plan.md` | Updated to reflect completed phases, corrected version numbers (JupyterLab 4.5 not 4.6), and added a new Phase 6 documenting all the fixes in this work. |
-| `docs/architecture.md` *(this work)* | Full architecture reference: package layout, data-flow diagram, object relationships, block pipeline conventions, code generation pattern, and extension points. |
+| `docs/architecture.md` | Full architecture reference: package layout, data-flow diagram, object relationships, block pipeline conventions, code generation pattern, and extension points. |
+| `docs/blocks-reference.md` | Complete block reference: every block organized by category, with its block type name, dplyr equivalent, description, and generated Python. |
 | `CHANGELOG.md` | Rewrote the `0.1.0` entry with accurate versions and full sections covering all new features, the rebrand, dependency upgrades, build fixes, bug fixes, and docs. |

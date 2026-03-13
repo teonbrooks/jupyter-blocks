@@ -129,4 +129,25 @@ pythonGenerator.forBlock['tidyblocks_op_str_contains'] = (block, generator) => {
   return [`(${val}).str.contains('${pattern}', na=False)`, Order.FUNCTION_CALL];
 };
 
+// dplyr: between(x, left, right) — inclusive range check
+pythonGenerator.forBlock['tidyblocks_op_between'] = (block, generator) => {
+  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const left = block.getFieldValue('LEFT');
+  const right = block.getFieldValue('RIGHT');
+  return [`(${val}).between(${left}, ${right})`, Order.FUNCTION_CALL];
+};
+
+// dplyr: coalesce(x, y) — first non-missing value
+pythonGenerator.forBlock['tidyblocks_op_coalesce'] = (block, generator) => {
+  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const replacement = generator.valueToCode(block, 'REPLACEMENT', Order.NONE) || 'None';
+  return [`(${val}).fillna(${replacement})`, Order.FUNCTION_CALL];
+};
+
+// dplyr: n_distinct(x) — count unique values
+pythonGenerator.forBlock['tidyblocks_op_n_distinct'] = (block, generator) => {
+  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  return [`(${val}).nunique()`, Order.FUNCTION_CALL];
+};
+
 export { Order };

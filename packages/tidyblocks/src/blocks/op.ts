@@ -223,5 +223,42 @@ Blockly.defineBlocksWithJsonArray([
     colour: '#F9B5B2',
     inputsInline: true,
     tooltip: 'Check whether a string column contains a pattern.'
+  },
+  // dplyr: between() — test whether values fall within an inclusive range
+  {
+    type: 'tidyblocks_op_between',
+    message0: '%1 between %2 and %3',
+    args0: [
+      { type: 'input_value', name: 'VALUE' },
+      { type: 'field_number', name: 'LEFT', value: 0 },
+      { type: 'field_number', name: 'RIGHT', value: 1 }
+    ],
+    output: 'Boolean',
+    colour: '#F9B5B2',
+    inputsInline: true,
+    tooltip: 'Return True for values within the inclusive range [left, right].'
+  },
+  // dplyr: coalesce() — return the first non-missing value across columns
+  {
+    type: 'tidyblocks_op_coalesce',
+    message0: 'coalesce %1 with %2',
+    args0: [
+      { type: 'input_value', name: 'VALUE' },
+      { type: 'input_value', name: 'REPLACEMENT' }
+    ],
+    output: null,
+    colour: '#F9B5B2',
+    inputsInline: true,
+    tooltip: 'Replace missing values in a column with values from another column or expression.'
+  },
+  // dplyr: n_distinct() — count of unique values in a column
+  {
+    type: 'tidyblocks_op_n_distinct',
+    message0: 'n_distinct %1',
+    args0: [{ type: 'input_value', name: 'VALUE' }],
+    output: 'Number',
+    colour: '#F9B5B2',
+    inputsInline: true,
+    tooltip: 'Count the number of distinct (unique) values in a column.'
   }
 ]);

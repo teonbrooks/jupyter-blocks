@@ -111,10 +111,10 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
     // Handle state restoration.
     if (restorer) {
       // When restoring the app, if the document was open, reopen it
-      restorer.restore(tracker, {
+      restorer.restore(tracker as any, {
         command: 'docmanager:open',
-        args: widget => ({ path: widget.context.path, factory: FACTORY }),
-        name: widget => widget.context.path
+        args: (widget: any) => ({ path: widget.context.path, factory: FACTORY }),
+        name: (widget: any) => widget.context.path
       });
     }
 

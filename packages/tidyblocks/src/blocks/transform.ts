@@ -9,6 +9,7 @@ const SUMMARIZE_OPS = [
   ['max', 'max'],
   ['std dev', 'std'],
   ['variance', 'var'],
+  ['n distinct', 'nunique'],
   ['any', 'any'],
   ['all', 'all']
 ];
@@ -32,6 +33,7 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Keep only rows matching a condition.'
   },
   {
+    // dplyr: select() — keep named columns
     type: 'tidyblocks_transform_select',
     message0: 'select columns %1',
     args0: [{ type: 'field_input', name: 'COLUMNS', text: 'col1, col2' }],
@@ -50,8 +52,9 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Remove the specified columns (comma-separated).'
   },
   {
-    type: 'tidyblocks_transform_create',
-    message0: 'create column %1 as %2',
+    // dplyr: mutate() — create or overwrite a column
+    type: 'tidyblocks_transform_mutate',
+    message0: 'mutate %1 = %2',
     args0: [
       { type: 'field_input', name: 'COLUMN', text: 'new_col' },
       { type: 'input_value', name: 'EXPRESSION' }
@@ -62,6 +65,7 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Add or replace a column using an expression.'
   },
   {
+    // dplyr: rename() — rename a single column
     type: 'tidyblocks_transform_rename',
     message0: 'rename %1 to %2',
     args0: [
@@ -74,8 +78,9 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Rename a column.'
   },
   {
-    type: 'tidyblocks_transform_sort',
-    message0: 'sort by %1 %2',
+    // dplyr: arrange() — order rows by column values
+    type: 'tidyblocks_transform_arrange',
+    message0: 'arrange by %1 %2',
     args0: [
       { type: 'field_input', name: 'COLUMNS', text: 'col1' },
       {
@@ -93,8 +98,9 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Sort rows by one or more columns (comma-separated).'
   },
   {
-    type: 'tidyblocks_transform_unique',
-    message0: 'unique by %1',
+    // dplyr: distinct() — keep unique rows
+    type: 'tidyblocks_transform_distinct',
+    message0: 'distinct by %1',
     args0: [{ type: 'field_input', name: 'COLUMNS', text: 'col1' }],
     previousStatement: null,
     nextStatement: null,
@@ -102,6 +108,7 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Keep only rows with distinct values in the specified columns.'
   },
   {
+    // dplyr: group_by() — group rows by column values
     type: 'tidyblocks_transform_groupby',
     message0: 'group by %1',
     args0: [{ type: 'field_input', name: 'COLUMNS', text: 'col1' }],
@@ -111,6 +118,7 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Group rows by column values for subsequent summarize or running.'
   },
   {
+    // dplyr: ungroup() — remove grouping
     type: 'tidyblocks_transform_ungroup',
     message0: 'ungroup',
     previousStatement: null,
@@ -119,6 +127,7 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Remove grouping and reset the index.'
   },
   {
+    // dplyr: summarize() — aggregate groups to one row each
     type: 'tidyblocks_transform_summarize',
     message0: 'summarize %1 of %2 as %3',
     args0: [
@@ -196,8 +205,9 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Drop rows that have missing values in the specified columns.'
   },
   {
-    type: 'tidyblocks_transform_sample',
-    message0: 'sample %1 rows',
+    // dplyr: slice_sample() — random sample of N rows
+    type: 'tidyblocks_transform_slice_sample',
+    message0: 'slice_sample %1 rows',
     args0: [
       { type: 'field_number', name: 'N', value: 10, min: 1, precision: 1 }
     ],
@@ -207,8 +217,9 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Randomly sample N rows from the DataFrame.'
   },
   {
-    type: 'tidyblocks_transform_head',
-    message0: 'first %1 rows',
+    // dplyr: slice_head() — first N rows
+    type: 'tidyblocks_transform_slice_head',
+    message0: 'slice_head %1 rows',
     args0: [
       { type: 'field_number', name: 'N', value: 10, min: 1, precision: 1 }
     ],
@@ -218,8 +229,9 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Keep only the first N rows.'
   },
   {
-    type: 'tidyblocks_transform_tail',
-    message0: 'last %1 rows',
+    // dplyr: slice_tail() — last N rows
+    type: 'tidyblocks_transform_slice_tail',
+    message0: 'slice_tail %1 rows',
     args0: [
       { type: 'field_number', name: 'N', value: 10, min: 1, precision: 1 }
     ],
@@ -227,6 +239,63 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     colour: '#76AADB',
     tooltip: 'Keep only the last N rows.'
+  },
+  {
+    // dplyr: slice_min() — N rows with smallest values in a column
+    type: 'tidyblocks_transform_slice_min',
+    message0: 'slice_min %1 rows by %2',
+    args0: [
+      { type: 'field_number', name: 'N', value: 5, min: 1, precision: 1 },
+      { type: 'field_input', name: 'COLUMN', text: 'col1' }
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: '#76AADB',
+    tooltip: 'Keep the N rows with the smallest values in a column.'
+  },
+  {
+    // dplyr: slice_max() — N rows with largest values in a column
+    type: 'tidyblocks_transform_slice_max',
+    message0: 'slice_max %1 rows by %2',
+    args0: [
+      { type: 'field_number', name: 'N', value: 5, min: 1, precision: 1 },
+      { type: 'field_input', name: 'COLUMN', text: 'col1' }
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: '#76AADB',
+    tooltip: 'Keep the N rows with the largest values in a column.'
+  },
+  {
+    // dplyr: count() — count rows per group (or total if ungrouped)
+    type: 'tidyblocks_transform_count',
+    message0: 'count by %1',
+    args0: [{ type: 'field_input', name: 'COLUMNS', text: 'col1' }],
+    previousStatement: null,
+    nextStatement: null,
+    colour: '#76AADB',
+    tooltip: 'Count rows for each combination of the specified columns.'
+  },
+  {
+    // dplyr: relocate() — move column(s) to before or after another column
+    type: 'tidyblocks_transform_relocate',
+    message0: 'relocate %1 %2 %3',
+    args0: [
+      { type: 'field_input', name: 'COLUMNS', text: 'col1' },
+      {
+        type: 'field_dropdown',
+        name: 'POSITION',
+        options: [
+          ['before', 'before'],
+          ['after', 'after']
+        ]
+      },
+      { type: 'field_input', name: 'ANCHOR', text: 'col2' }
+    ],
+    previousStatement: null,
+    nextStatement: null,
+    colour: '#76AADB',
+    tooltip: 'Move one or more columns to before or after a reference column.'
   },
   {
     type: 'tidyblocks_transform_display',
