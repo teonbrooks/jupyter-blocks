@@ -22,11 +22,9 @@ import {
   registerWidgetManager
 } from '@jupyter-widgets/jupyterlab-manager';
 
-import { BlocklyEditorFactory } from 'jupyter-tidyblocks';
-import { IBlocklyRegistry } from 'jupyter-tidyblocks';
-import { BlocklyEditor } from 'jupyter-tidyblocks';
-
-import { registerTidyblocks } from 'jupyter-tidyblocks-blocks';
+import { BlocklyEditorFactory } from 'jupyter-blocks';
+import { IBlocklyRegistry } from 'jupyter-blocks';
+import { BlocklyEditor } from 'jupyter-blocks';
 
 import { blockly_icon } from './icons';
 
@@ -35,20 +33,18 @@ import { blockly_icon } from './icons';
 //
 // 1.  A `BlocklyEditorFactory` is created — it holds the shared
 //     `BlocklyRegistry` (toolboxes + generators) and acts as the JupyterLab
-//     document-model factory for `.jpblockly` files.
+//     document-model factory for `.jblk` files.
 //
-// 2.  The `.jpblockly` file type is registered with `app.docRegistry` so
+// 2.  The `.jblk` file type is registered with `app.docRegistry` so
 //     JupyterLab knows to open these files with the Blockly editor.
 //
 // 3.  A "New Blockly Editor" command is added to the launcher, command
 //     palette, and kernel menu so users can create files and control the
 //     kernel lifecycle.
 //
-// 4.  `registerTidyblocks(registry)` is called to add the 'Tidy Data'
-//     toolbox and all tidyblocks_* Python generators to the shared registry.
-//
-// 5.  The registry is returned as the `IBlocklyRegistry` token value so
-//     other plugins can extend it with their own blocks and toolboxes.
+// 4.  The registry is returned as the `IBlocklyRegistry` token value so
+//     other plugins (e.g. jupyter-tidyblocks-extension) can extend it
+//     with their own blocks and toolboxes.
 // ---------------------------------------------------------------------------
 
 /**
@@ -72,10 +68,10 @@ namespace CommandIDs {
 const PLUGIN_ID = '@jupyterlab/translation-extension:plugin';
 
 /**
- * Initialization data for the jupyterlab-blocky extension.
+ * Initialization data for the jupyter-blocks extension.
  */
 const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
-  id: 'jupyterlab-blocky:plugin',
+  id: 'jupyter-blocks:plugin',
   autoStart: true,
   requires: [
     ILayoutRestorer,
@@ -101,7 +97,7 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
     widgetRegistry: IJupyterWidgetRegistry | null
   ): IBlocklyRegistry => {
     // Namespace for the tracker
-    const namespace = 'jupyterlab-blocky';
+    const namespace = 'jupyter-blocks';
 
     // Creating the tracker for the document
     const tracker = new WidgetTracker<BlocklyEditor>({ namespace });
@@ -111,7 +107,10 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
       // When restoring the app, if the document was open, reopen it
       restorer.restore(tracker as any, {
         command: 'docmanager:open',
-        args: (widget: any) => ({ path: widget.context.path, factory: FACTORY }),
+        args: (widget: any) => ({
+          path: widget.context.path,
+          factory: FACTORY
+        }),
         name: (widget: any) => widget.context.path
       });
     }
@@ -163,10 +162,10 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
       displayName: 'Blockly',
       contentType: 'file',
       fileFormat: 'json',
-      extensions: ['.jpblockly'],
+      extensions: ['.jblk'],
       mimeTypes: ['application/json'],
       icon: jsonIcon as any,
-      iconLabel: 'JupyterLab-Blockly'
+      iconLabel: 'jupyter-blocks'
     });
     // Registering the widget factory
     app.docRegistry.addWidgetFactory(widgetFactory);
@@ -194,7 +193,6 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
           : currentLocale[currentLocale.length - 2].toUpperCase() +
             currentLocale[currentLocale.length - 1].toLowerCase();
 
-
       // Transmitting the current language to the manager.
       widgetFactory.registry.setlanguage(language);
     });
@@ -214,7 +212,7 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
         const model = await commands.execute('docmanager:new-untitled', {
           path: cwd,
           type: 'file',
-          ext: '.jpblockly'
+          ext: '.jblk'
         });
 
         // Open the newly created file with the 'Editor'
@@ -362,9 +360,6 @@ const plugin: JupyterFrontEndPlugin<IBlocklyRegistry> = {
         );
       });
     }
-
-    // Register all tidy-data blocks and the Tidy Data toolbox.
-    registerTidyblocks(widgetFactory.registry);
 
     return widgetFactory.registry;
   }

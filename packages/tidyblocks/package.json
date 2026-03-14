@@ -1,7 +1,7 @@
 {
-  "name": "jupyter-tidyblocks-blocks",
-  "version": "0.1.0dev",
-  "description": "Tidy data analysis blocks for jupyter-tidyblocks.",
+  "name": "jupyter-tidyblocks",
+  "version": "0.1.0-alpha.0",
+  "description": "Tidy data analysis blocks for jupyter-blocks.",
   "keywords": [
     "blockly",
     "jupyter",
@@ -10,9 +10,9 @@
     "data-analysis",
     "pandas"
   ],
-  "homepage": "https://github.com/teonbrooks/jupyter-tidyblocks",
+  "homepage": "https://github.com/teonbrooks/jupyter-blocks",
   "bugs": {
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks/issues"
+    "url": "https://github.com/teonbrooks/jupyter-blocks/issues"
   },
   "license": "BSD-3-Clause",
   "author": {
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks"
+    "url": "https://github.com/teonbrooks/jupyter-blocks"
   },
   "scripts": {
     "build": "vite build",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "blockly": "^12.0",
-    "jupyter-tidyblocks": "^0.1.0"
+    "jupyter-blocks": "^0.1.0-alpha.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.0",

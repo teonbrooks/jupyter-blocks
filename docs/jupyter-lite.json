@@ -1,9 +1,9 @@
 {
   "jupyter-config-data": {
     "fileTypes": {
-      "jpblockly": {
+      "jblk": {
         "extensions": [
-          ".jpblockly"
+          ".jblk"
         ],
         "fileFormat": "json",
         "mimeTypes": [

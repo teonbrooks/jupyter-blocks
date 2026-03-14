@@ -174,7 +174,7 @@ npm run build
 jupyter lab
 ```
 
-1. Open (or create) a `.jpblockly` file.
+1. Open (or create) a `.jblk` file.
 2. Select the **Tidy Data** toolbox from the toolbar dropdown.
 3. Expand the **Transform** category — your block should appear.
 4. Drag a data block (e.g. penguins) onto the canvas, then chain the normalize block
@@ -235,9 +235,9 @@ If your blocks don't fit an existing category, create a new file in `blocks/` an
 2. Add a new `{ kind: 'category', name: '...', colour: '...', contents: [...] }`
    object to `TIDYBLOCKS_TOOLBOX` in `toolbox.ts`.
 
-Choose a colour that contrasts with the existing categories:
+Choose a color that contrasts with the existing categories:
 
-| Category | Colour |
+| Category | Color |
 |---|---|
 | Data | `#FEBE4C` (amber) |
 | Transform | `#76AADB` (blue) |
@@ -256,7 +256,7 @@ this package. Declare `IBlocklyRegistry` as a `required` token in your plugin an
 call the registry methods directly:
 
 ```typescript
-import { IBlocklyRegistry } from 'jupyter-tidyblocks';
+import { IBlocklyRegistry } from 'jupyter-blocks';
 import * as Blockly from 'blockly';
 import { pythonGenerator } from 'blockly/python';
 

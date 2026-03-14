@@ -1,8 +1,8 @@
 {
-  "name": "jupyter-tidyblocks-root",
+  "name": "jupyter-blocks-root",
   "private": true,
-  "version": "0.1.0dev",
-  "description": "Tidy data analysis with Blockly blocks for JupyterLab.",
+  "version": "0.1.0-alpha.0",
+  "description": "Blockly-based notebook editor for JupyterLab — core library and tidy-data extension.",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -11,13 +11,13 @@
     "tidy-data",
     "data-analysis"
   ],
-  "homepage": "https://github.com/teonbrooks/jupyter-tidyblocks",
+  "homepage": "https://github.com/teonbrooks/jupyter-blocks",
   "bugs": {
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks/issues"
+    "url": "https://github.com/teonbrooks/jupyter-blocks/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks"
+    "url": "https://github.com/teonbrooks/jupyter-blocks"
   },
   "packageManager": "npm@11.1.0",
   "license": "BSD-3-Clause",
@@ -35,7 +35,7 @@
     "@lumino/widgets": "2.7.5",
     "@jupyterlab/application": "4.5.6",
     "@jupyterlab/apputils": "4.5.6",
-    "@jupyterlab/coreutils": "6.5.6",
+    "@jupyterlab/coreutils@<6": "6.5.6",
     "@jupyterlab/services": "7.5.6",
     "@jupyterlab/ui-components": "4.5.6",
     "@lezer/common": "1.5.1"
@@ -44,6 +44,7 @@
     "packages/*"
   ],
   "scripts": {
+    "postinstall": "node -e \"const fs=require('fs');['@jupyterlab','@lumino'].forEach(s=>{const p='packages/blocks/node_modules/'+s;if(fs.existsSync(p)){fs.rmSync(p,{recursive:true});console.log('Removed stale nested '+s+' from packages/blocks');}});\"",
     "build": "turbo run build",
     "build:prod": "turbo run build:prod",
     "clean": "turbo run clean",
@@ -63,6 +64,7 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^9.0.0",
+    "typescript-eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.37.0",

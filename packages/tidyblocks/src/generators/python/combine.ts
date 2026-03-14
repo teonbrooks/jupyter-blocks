@@ -36,9 +36,7 @@ pythonGenerator.forBlock['tidyblocks_combine_semi_join'] = block => {
   const rightDf = block.getFieldValue('RIGHT_DF');
   const leftOn = block.getFieldValue('LEFT_ON');
   const rightOn = block.getFieldValue('RIGHT_ON');
-  return (
-    `_df = _df[_df['${leftOn}'].isin(${rightDf}['${rightOn}'])]\n`
-  );
+  return `_df = _df[_df['${leftOn}'].isin(${rightDf}['${rightOn}'])]\n`;
 };
 
 // dplyr: anti_join() — filtering join; keep rows that have no match
@@ -46,9 +44,7 @@ pythonGenerator.forBlock['tidyblocks_combine_anti_join'] = block => {
   const rightDf = block.getFieldValue('RIGHT_DF');
   const leftOn = block.getFieldValue('LEFT_ON');
   const rightOn = block.getFieldValue('RIGHT_ON');
-  return (
-    `_df = _df[~_df['${leftOn}'].isin(${rightDf}['${rightOn}'])]\n`
-  );
+  return `_df = _df[~_df['${leftOn}'].isin(${rightDf}['${rightOn}'])]\n`;
 };
 
 // dplyr: bind_cols() — horizontally bind by column position

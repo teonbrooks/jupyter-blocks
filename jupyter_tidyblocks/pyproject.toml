@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
+    "jupyter_blocks",
     "jupyterlab_widgets~=3.0.11"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
@@ -36,22 +37,24 @@ dev = [
 
 [tool.hatch.version]
 source = "nodejs"
+path = "../packages/tidyblocks-extension/package.json"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/jupyter_tidyblocks"]
 
 [tool.hatch.build.hooks.version]
-path = "jupyter_tidyblocks/_version.py"
+path = "src/jupyter_tidyblocks/_version.py"
 
 [tool.hatch.metadata.hooks.nodejs]
 fields = ["description", "authors", "urls"]
+path = "../packages/tidyblocks-extension/package.json"
 
 [tool.hatch.build.targets.sdist]
 artifacts = ["/jupyter_tidyblocks/labextension"]
 exclude = ["/.github", "/binder", "node_modules"]
 
-[tool.hatch.build.targets.sdist.force-include]
-"./packages" = "packages"
-
 [tool.hatch.build.targets.wheel.shared-data]
-"jupyter_tidyblocks/labextension" = "share/jupyter/labextensions/jupyter-tidyblocks-extension"
+"labextension" = "share/jupyter/labextensions/jupyter-tidyblocks-extension"
 "install.json" = "share/jupyter/labextensions/jupyter-tidyblocks-extension/install.json"
 
 [tool.hatch.build.hooks.jupyter-builder]

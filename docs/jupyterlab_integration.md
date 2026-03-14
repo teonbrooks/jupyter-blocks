@@ -1,6 +1,6 @@
 # JupyterLab Integration
 
-The JupyterLab-Blockly extension is fully integrated in the Jupyter enviroment to offer a seamless experience to the user. Thus, the Blockly editor automatically adapts to any modyfication you make to JupyterLab's appearance.
+The jupyter-blocks extension is fully integrated in the Jupyter environment to offer a seamless experience to the user. The Blockly editor automatically adapts to any modification you make to JupyterLab's appearance.
 
 ## Theme
 
@@ -12,7 +12,7 @@ Below is an example of how the Blockly editor looks with the dark theme.
 
 You can experiment with this by pressing "Settings" > "Theme", from the JupyterLab toolbar.
 
-## Internalization
+## Internationalization
 
 If you prefer using JupyterLab in another language, the Blockly editor can also render its blocks and additional messages (visible by right clicking on any block or in the workspace) in the selected language.
 

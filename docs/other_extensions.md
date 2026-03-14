@@ -1,6 +1,6 @@
-# Extending jupyter-tidyblocks
+# Extending jupyter-blocks
 
-The `jupyter-tidyblocks` core extension exposes an `IBlocklyRegistry` token that
+The `jupyter-blocks` core extension exposes an `IBlocklyRegistry` token that
 other JupyterLab plugins can use to register new blocks, toolboxes, and generators —
 without modifying this repository.
 
@@ -22,10 +22,10 @@ copier copy --trust https://github.com/jupyterlab/extension-template .
 
 Fill in the prompts. You will mostly work in `src/index.ts`.
 
-### 2. Add `jupyter-tidyblocks` as a dependency
+### 2. Add `jupyter-blocks` as a dependency
 
 ```bash
-npm install jupyter-tidyblocks
+npm install jupyter-blocks
 ```
 
 Add it to your extension's `package.json` dependencies and declare it as a
@@ -35,7 +35,7 @@ extension and the core share the same registry instance:
 ```json
 "jupyterlab": {
   "sharedPackages": {
-    "jupyter-tidyblocks": {
+    "jupyter-blocks": {
       "bundled": false,
       "singleton": true
     }
@@ -47,7 +47,7 @@ extension and the core share the same registry instance:
 
 ```typescript
 // src/index.ts
-import { IBlocklyRegistry } from 'jupyter-tidyblocks';
+import { IBlocklyRegistry } from 'jupyter-blocks';
 import * as Blockly from 'blockly';
 import { pythonGenerator } from 'blockly/python';
 
@@ -111,13 +111,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
 ## Add to `pyproject.toml`
 
-Declare `jupyter-tidyblocks` as a Python dependency so pip installs it alongside
+Declare `jupyter-blocks` as a Python dependency so pip installs it alongside
 your extension:
 
 ```toml
 [project]
 dependencies = [
-    "jupyter-tidyblocks>=0.1.0",
+    "jupyter-blocks>=0.1.0",
     # ... other dependencies
 ]
 ```

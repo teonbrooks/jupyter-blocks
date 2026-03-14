@@ -7,8 +7,22 @@
 
 ## Install
 
+### Tidy-data analysis (recommended — installs both packages)
+
 ```bash
 pip install jupyter-tidyblocks
+```
+
+or via conda-forge (once published):
+
+```bash
+conda install -c conda-forge jupyter-tidyblocks
+```
+
+### Generic Blockly editor only
+
+```bash
+pip install jupyter-blocks
 ```
 
 ### Supported kernels
@@ -22,7 +36,7 @@ pip install jupyter-tidyblocks
 ## Uninstall
 
 ```bash
-pip uninstall jupyter-tidyblocks
+pip uninstall jupyter-tidyblocks jupyter-blocks
 ```
 
 ## Development install
@@ -31,20 +45,27 @@ pip uninstall jupyter-tidyblocks
 
 ```bash
 # Create and activate a conda environment
-micromamba create -n tidyblocks -c conda-forge python nodejs pre-commit jupyterlab ipykernel
-micromamba activate tidyblocks
+conda create -n blocks -c conda-forge python nodejs pre-commit jupyterlab ipykernel
+conda activate blocks
 
 # Clone the repo
-git clone https://github.com/teonbrooks/jupyter-tidyblocks
-cd jupyter-tidyblocks
+git clone https://github.com/teonbrooks/jupyter-blocks
+cd jupyter-blocks
 
 # Install pre-commit hooks
 pre-commit install
 
-# Install the Python package in editable mode and build the JS packages
-pip install -e ".[dev]"
-jupyter labextension develop . --overwrite
+# Install npm packages and build
+npm install
 npm run build
+
+# Install Python packages in editable mode
+pip install -e ./jupyter_blocks
+pip install -e ./jupyter_tidyblocks
+
+# Register labextensions for development
+jupyter labextension develop ./jupyter_blocks --overwrite
+jupyter labextension develop ./jupyter_tidyblocks --overwrite
 ```
 
 You can watch the source directory and run JupyterLab at the same time in
@@ -65,12 +86,12 @@ the change (you may need to wait several seconds for the rebuild to finish).
 ## Development uninstall
 
 ```bash
-pip uninstall jupyter-tidyblocks
+pip uninstall jupyter-tidyblocks jupyter-blocks
 ```
 
-Remove the symlink created by `jupyter labextension develop`:
+Remove the symlinks created by `jupyter labextension develop`:
 
 ```bash
 jupyter labextension list   # find the labextensions folder
-# remove the jupyter-tidyblocks-extension symlink from that folder
+# remove jupyter-blocks-extension and jupyter-tidyblocks-extension symlinks
 ```

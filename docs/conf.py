@@ -16,12 +16,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'jupyterlab-blockly'
-copyright = '2024, QuantStack'
-author = 'Denisa Checiu'
+project = 'jupyter-blocks'
+copyright = '2026, Teon L. Brooks'
+author = 'Teon L. Brooks'
 
 # The full version, including alpha/beta/rc tags
-release = '0.3.2'
+release = '0.1.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -51,12 +51,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
-    'github_url': 'https://github.com/quantstack/jupyterlab-blockly',
+    'github_url': 'https://github.com/teonbrooks/jupyter-blocks',
     'use_edit_page_button': True,
     'icon_links': [
         {
             'name': 'PyPI',
-            'url': 'https://pypi.org/project/jupyterlab-blockly',
+            'url': 'https://pypi.org/project/jupyter-blocks',
             'icon': 'fa-solid fa-box',
         },
     ],
@@ -64,8 +64,8 @@ html_theme_options = {
     'pygment_dark_style': 'github-dark'
 }
 html_context = {
-    'github_user': 'quantstack',
-    'github_repo': 'jupyterlab-blockly',
+    'github_user': 'teonbrooks',
+    'github_repo': 'jupyter-blocks',
     'github_version': 'main',
     'doc_path': 'docs',
 }
@@ -76,5 +76,5 @@ html_context = {
 # html_static_path = ['_static']
 
 # Jupyterlite
-jupyterlite_contents = ["example.jpblockly", "logic.jpblockly", "loops.jpblockly", "text_and_lists.jpblockly", "functions.jpblockly"]
-jupyterlite_dir = "."
+jupyterlite_contents = ["example.jblk", "logic.jblk", "loops.jblk", "text_and_lists.jblk", "functions.jblk"]
+jupyterlite_dir = "../examples"

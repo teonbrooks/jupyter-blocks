@@ -9,7 +9,7 @@ available blocks organized into categories.
 
 ## Tidy Data toolbox
 
-When a `.jpblockly` file is opened with the **Tidy Data** toolbox selected (the
+When a `.jblk` file is opened with the **Tidy Data** toolbox selected (the
 default), the sidebar shows seven categories:
 
 | Category | Colour | Purpose |
@@ -37,5 +37,5 @@ editor panel).
 
 You can register a custom toolbox from a JupyterLab plugin using
 `IBlocklyRegistry.registerToolbox(name, definition)`. Once registered it appears
-automatically in the dropdown. See [Extending jupyter-tidyblocks](other_extensions.md)
+automatically in the dropdown. See [Extending jupyter-blocks](other_extensions.md)
 and [Adding Custom Blocks](custom-blocks.md) for a full guide.

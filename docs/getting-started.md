@@ -1,7 +1,7 @@
-# Getting Started with jupyter-tidyblocks
+# Getting Started with jupyter-blocks
 
-This guide walks you through installing jupyter-tidyblocks, launching JupyterLab,
-and building your first tidy data pipeline with drag-and-drop blocks.
+This guide walks you through installing jupyter-blocks and jupyter-tidyblocks,
+launching JupyterLab, and building your first tidy data pipeline with drag-and-drop blocks.
 
 ---
 
@@ -35,8 +35,8 @@ pip install jupyter_tidyblocks
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/teonbrooks/jupyter-tidyblocks.git
-cd jupyter-tidyblocks
+git clone https://github.com/teonbrooks/jupyter-blocks.git
+cd jupyter-blocks
 
 # 2. Install the Python package and build the JS packages
 pip install -e ".[dev]"
@@ -50,6 +50,7 @@ jupyter labextension list
 You should see a line like:
 
 ```
+jupyter-blocks-extension v0.1.0  enabled  OK  (python, jupyter_blocks)
 jupyter-tidyblocks-extension v0.1.0  enabled  OK  (python, jupyter_tidyblocks)
 ```
 
@@ -68,7 +69,7 @@ file type alongside notebooks and text files.
 
 ## Creating Your First Blockly File
 
-There are three ways to create a new `.jpblockly` file:
+There are three ways to create a new `.jblk` file:
 
 **From the Launcher** (Home tab):
 1. Click the **+** button to open the Launcher
@@ -76,7 +77,7 @@ There are three ways to create a new `.jpblockly` file:
 
 **From the File Browser**:
 1. Right-click in the file browser panel
-2. Choose **New File** and name it with a `.jpblockly` extension
+2. Choose **New File** and name it with a `.jblk` extension
 
 **From the Command Palette** (`Cmd+Shift+C` / `Ctrl+Shift+C`):
 1. Type *Blockly* and select **New Blockly Editor**
@@ -141,7 +142,7 @@ code. The scatter plot appears in the output area below the code preview.
 
 ## Saving Your Work
 
-Blockly files are saved as JSON with the `.jpblockly` extension. Use
+Blockly files are saved as JSON with the `.jblk` extension. Use
 `Cmd+S` / `Ctrl+S` to save at any time. The workspace (block layout) and the
 associated kernel state are preserved.
 
@@ -188,8 +189,8 @@ from the shared kernel state.
 
 **The extension does not appear in the Launcher**
 
-Run `jupyter labextension list` and confirm `jupyter-tidyblocks-extension` is
-listed as `enabled OK`. If it shows a version conflict, ensure your JupyterLab
+Run `jupyter labextension list` and confirm both `jupyter-blocks-extension` and
+`jupyter-tidyblocks-extension` are listed as `enabled OK`. If it shows a version conflict, ensure your JupyterLab
 is >= 4.5:
 
 ```bash

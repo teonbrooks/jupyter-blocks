@@ -12,10 +12,10 @@ export default tseslint.config(
       '.github/**',
       'assets/**',
       'binder/**',
-      'jupyterlab_blockly/**',
       'docs/**',
       'examples/**',
-      'scripts/**'
+      'scripts/**',
+      'eslint.config.js'
     ]
   },
   ...tseslint.configs.recommended,

@@ -19,8 +19,8 @@ import { installAllBlocks } from '@blockly/field-colour';
  * Blockly editor.
  *
  * One registry instance is created per `BlocklyEditorFactory` (i.e. shared
- * across all open `.jpblockly` documents in the same JupyterLab session).
- * External plugins — such as `jupyter-tidyblocks-blocks` — receive a
+ * across all open `.jblk` documents in the same JupyterLab session).
+ * External plugins — such as `jupyter-tidyblocks` — receive a
  * reference to this registry via the `IBlocklyRegistry` token and use it
  * to register additional toolboxes, block definitions, and generators.
  */

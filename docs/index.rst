@@ -1,10 +1,10 @@
-.. jupyter-tidyblocks documentation master file
+.. jupyter-blocks documentation master file
 
-Welcome to jupyter-tidyblocks!
-================================
+Welcome to jupyter-blocks!
+============================
 
-jupyter-tidyblocks is a JupyterLab extension for tidy data analysis using drag-and-drop Blockly blocks.
-Build data pipelines visually — filter, group, summarize, plot — and see the generated Python code execute live in your kernel.
+jupyter-blocks is a JupyterLab extension providing a visual Blockly editor for notebooks.
+The companion package jupyter-tidyblocks adds tidy data analysis blocks — filter, group, summarize, plot — generating executable Python code that runs live in your kernel.
 
 The extension uses `Blockly <https://developers.google.com/blockly>`_, an open source library designed by Google.
 It is inspired by `tidyblocks <https://github.com/gvwilson/tidyblocks>`_ by Greg Wilson, a block-based tool for tidy data analysis,
@@ -15,7 +15,7 @@ and is a fork of `jupyterlab-blockly <https://github.com/QuantStack/jupyterlab-b
 
 Try it directly in your browser using JupyterLite!
 
-.. jupyterlite:: example.jpblockly
+.. jupyterlite:: example.jblk
    :width: 100%
    :height: 600px
 

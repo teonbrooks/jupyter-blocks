@@ -85,9 +85,7 @@ Blockly.defineBlocksWithJsonArray([
   {
     type: 'tidyblocks_value_exponential',
     message0: 'Exponential(lambda %1)',
-    args0: [
-      { type: 'field_number', name: 'LAMBDA', value: 1, min: 0.0001 }
-    ],
+    args0: [{ type: 'field_number', name: 'LAMBDA', value: 1, min: 0.0001 }],
     output: 'Number',
     colour: '#E7553C',
     tooltip: 'Random draw from Exponential distribution.'

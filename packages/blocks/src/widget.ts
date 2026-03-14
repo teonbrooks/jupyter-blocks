@@ -68,8 +68,10 @@ export class BlocklyEditor extends DocumentWidget<BlocklyPanel, DocumentModel> {
 }
 
 export namespace BlocklyEditor {
-  export interface IOptions
-    extends DocumentWidget.IOptions<BlocklyPanel, DocumentModel> {
+  export interface IOptions extends DocumentWidget.IOptions<
+    BlocklyPanel,
+    DocumentModel
+  > {
     manager: BlocklyManager;
   }
 }

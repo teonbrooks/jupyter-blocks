@@ -1,29 +1,16 @@
-# jupyter-tidyblocks
+# jupyter-blocks
 
-[![Github Actions Status](https://github.com/teonbrooks/jupyter-tidyblocks/actions/workflows/build.yml/badge.svg)](https://github.com/teonbrooks/jupyter-tidyblocks/actions/workflows/build.yml)
+[![Github Actions Status](https://github.com/teonbrooks/jupyter-blocks/actions/workflows/build.yml/badge.svg)](https://github.com/teonbrooks/jupyter-blocks/actions/workflows/build.yml)
 
-Tidy data analysis with Blockly blocks for JupyterLab.
+A monorepo containing two independently installable JupyterLab extensions:
 
-Drag and drop data-analysis blocks to build pipelines that generate executable Python code — powered by [Google Blockly](https://developers.google.com/blockly) and pandas.
+- **`jupyter-blocks`** — a generic [Google Blockly](https://developers.google.com/blockly) editor for JupyterLab.  Opens `.jblk` files, runs the generated code in a kernel, and exposes `IBlocklyRegistry` so other extensions can add their own toolboxes, blocks, and generators.
 
-Inspired by [Greg Wilson's tidyblocks](https://github.com/gvwilson/tidyblocks), a block-based tool for tidy data analysis.
-Built on top of [QuantStack/jupyterlab-blockly](https://github.com/QuantStack/jupyterlab-blockly), a Blockly editor extension for JupyterLab.
-
-## Features
-
-- Visual block-based pipeline builder inside JupyterLab
-- Tidy-data transform blocks: filter, select, group, summarize, join, and more
-- Plot blocks (bar, scatter, histogram, …) via plotly.express
-- Statistics blocks (t-test, k-means, …) via scipy/sklearn
-- Multiple kernel support: Python, JavaScript, Lua
-- Extensible via `IBlocklyRegistry` plugin token
-
-## Requirements
-
-- JupyterLab >= 4.5
-- Python >= 3.8
+- **`jupyter-tidyblocks`** — a tidy-data analysis layer on top of `jupyter-blocks`.  Inspired by [Greg Wilson's tidyblocks](https://github.com/gvwilson/tidyblocks) and originally built on [QuantStack/jupyterlab-blockly](https://github.com/QuantStack/jupyterlab-blockly).  Provides drag-and-drop pandas pipelines (filter, select, group, join, plot, …) that generate executable Python.
 
 ## Install
+
+### Tidy-data analysis (installs both packages)
 
 ```bash
 pip install jupyter-tidyblocks
@@ -33,6 +20,12 @@ or via conda-forge (once published):
 
 ```bash
 conda install -c conda-forge jupyter-tidyblocks
+```
+
+### Generic Blockly editor only
+
+```bash
+pip install jupyter-blocks
 ```
 
 ### Supported kernels
@@ -46,7 +39,8 @@ conda install -c conda-forge jupyter-tidyblocks
 ## Uninstall
 
 ```bash
-pip uninstall jupyter-tidyblocks
+pip uninstall jupyter-tidyblocks   # also removes jupyter-blocks if unused
+pip uninstall jupyter-blocks
 ```
 
 ## Contributing
@@ -54,21 +48,30 @@ pip uninstall jupyter-tidyblocks
 ### Development install
 
 ```bash
-micromamba create -n tidyblocks -c conda-forge python nodejs pre-commit jupyterlab ipykernel
-micromamba activate tidyblocks
-git clone https://github.com/teonbrooks/jupyter-tidyblocks
-cd jupyter-tidyblocks
+conda create -n blocks -c conda-forge python nodejs pre-commit jupyterlab ipykernel
+conda activate blocks
+
+git clone https://github.com/teonbrooks/jupyter-blocks
+cd jupyter-blocks
+
 pre-commit install
-pip install -e ".[dev]"
-jupyter labextension develop . --overwrite
-jlpm build
+npm install
+npm run build
+
+# Install Python packages in editable mode
+pip install -e ./jupyter_blocks
+pip install -e ./jupyter_tidyblocks
+
+# Register labextensions for development
+jupyter labextension develop ./jupyter_blocks --overwrite
+jupyter labextension develop ./jupyter_tidyblocks --overwrite
 ```
 
 Watch mode (two terminals):
 
 ```bash
 # Terminal 1 — rebuild on source changes
-jlpm watch
+npm run watch
 
 # Terminal 2 — run JupyterLab
 jupyter lab
@@ -77,14 +80,14 @@ jupyter lab
 ### Development uninstall
 
 ```bash
-pip uninstall jupyter-tidyblocks
+pip uninstall jupyter-tidyblocks jupyter-blocks
 ```
 
-Remove the symlink created by `jupyter labextension develop`:
+Remove the symlinks created by `jupyter labextension develop`:
 
 ```bash
 jupyter labextension list   # find labextensions folder
-# remove jupyter-tidyblocks symlink from that folder
+# remove jupyter-blocks-extension and jupyter-tidyblocks-extension symlinks
 ```
 
 ### Packaging

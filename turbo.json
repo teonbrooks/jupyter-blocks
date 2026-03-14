@@ -3,11 +3,19 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["lib/**", "../../jupyter_tidyblocks/labextension/**"]
+      "outputs": [
+        "lib/**",
+        "../../jupyter_blocks/labextension/**",
+        "../../jupyter_tidyblocks/labextension/**"
+      ]
     },
     "build:prod": {
       "dependsOn": ["^build:prod"],
-      "outputs": ["lib/**", "../../jupyter_tidyblocks/labextension/**"]
+      "outputs": [
+        "lib/**",
+        "../../jupyter_blocks/labextension/**",
+        "../../jupyter_tidyblocks/labextension/**"
+      ]
     },
     "clean": {
       "cache": false

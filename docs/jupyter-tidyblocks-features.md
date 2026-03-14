@@ -183,7 +183,7 @@ is selected from the **Kernel** dropdown in the editor toolbar.
 
 ## Extensibility
 
-The `IBlocklyRegistry` token (provided by `jupyter-tidyblocks`) allows any JupyterLab
+The `IBlocklyRegistry` token (provided by `jupyter-blocks`) allows any JupyterLab
 plugin to:
 
 - Register new block shapes (`registerBlocks`)
@@ -196,7 +196,7 @@ See [Adding Custom Blocks](custom-blocks.md) for a step-by-step guide.
 
 ## File Format
 
-Workspace state is saved as `.jpblockly` files — JSON containing the serialized Blockly
+Workspace state is saved as `.jblk` files — JSON containing the serialized Blockly
 workspace state. Files can be committed to version control and reopened to restore the
 exact block arrangement.
 
@@ -204,11 +204,11 @@ exact block arrangement.
 
 ## Build System
 
-- **Turborepo** for monorepo task orchestration across three packages
-- **Vite** (library mode) for `packages/blockly` and `packages/tidyblocks`
-- **`@jupyterlab/builder`** (webpack) for `packages/blockly-extension`
+- **Turborepo** for monorepo task orchestration across four packages
+- **Vite** (library mode) for `packages/blocks` and `packages/tidyblocks`
+- **`@jupyterlab/builder`** (webpack) for `packages/blocks-extension` and `packages/tidyblocks-extension`
 - **npm workspaces** with `overrides` for dependency version pinning
-- **hatchling + hatch-jupyter-builder** for the Python wheel build
+- **hatchling + hatch-nodejs-version** for the Python wheel build
 
 ---
 

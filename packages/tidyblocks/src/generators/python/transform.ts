@@ -34,8 +34,7 @@ pythonGenerator.forBlock['tidyblocks_transform_mutate'] = (
   generator
 ) => {
   const col = block.getFieldValue('COLUMN');
-  const expr =
-    generator.valueToCode(block, 'EXPRESSION', Order.NONE) || 'None';
+  const expr = generator.valueToCode(block, 'EXPRESSION', Order.NONE) || 'None';
   return `_df = _df.assign(**{'${col}': ${expr}})\n`;
 };
 
@@ -105,8 +104,7 @@ pythonGenerator.forBlock['tidyblocks_transform_fillna'] = (
   generator
 ) => {
   const col = block.getFieldValue('COLUMN');
-  const value =
-    generator.valueToCode(block, 'VALUE', Order.NONE) || 'None';
+  const value = generator.valueToCode(block, 'VALUE', Order.NONE) || 'None';
   return `_df = _df.assign(**{'${col}': _df['${col}'].fillna(${value})})\n`;
 };
 
@@ -155,7 +153,10 @@ pythonGenerator.forBlock['tidyblocks_transform_count'] = block => {
 
 // dplyr: relocate() — move columns before or after a reference column
 pythonGenerator.forBlock['tidyblocks_transform_relocate'] = block => {
-  const cols = block.getFieldValue('COLUMNS').split(',').map((c: string) => c.trim());
+  const cols = block
+    .getFieldValue('COLUMNS')
+    .split(',')
+    .map((c: string) => c.trim());
   const position = block.getFieldValue('POSITION');
   const anchor = block.getFieldValue('ANCHOR');
   // Build the new column order by inserting cols before/after anchor.

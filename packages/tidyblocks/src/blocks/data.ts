@@ -68,7 +68,8 @@ Blockly.defineBlocksWithJsonArray([
     message0: 'iris dataset',
     nextStatement: null,
     colour: '#FEBE4C',
-    tooltip: 'Classic Fisher iris dataset: sepal/petal measurements for 3 species (via seaborn).'
+    tooltip:
+      'Classic Fisher iris dataset: sepal/petal measurements for 3 species (via seaborn).'
   },
   {
     type: 'tidyblocks_data_titanic',
@@ -82,7 +83,8 @@ Blockly.defineBlocksWithJsonArray([
     message0: 'gapminder dataset',
     nextStatement: null,
     colour: '#FEBE4C',
-    tooltip: 'Gapminder life expectancy / GDP dataset across countries and years (via plotly.express).'
+    tooltip:
+      'Gapminder life expectancy / GDP dataset across countries and years (via plotly.express).'
   },
   {
     type: 'tidyblocks_data_csv',

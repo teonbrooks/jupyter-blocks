@@ -1,7 +1,7 @@
 /**
- * jupyter-tidyblocks-blocks
+ * jupyter-tidyblocks
  *
- * Tidy-data analysis blocks for jupyter-tidyblocks, inspired by
+ * Tidy-data analysis blocks for jupyter-blocks, inspired by
  * Greg Wilson's tidyblocks (https://github.com/gvwilson/tidyblocks).
  *
  * This package is responsible for:
@@ -10,11 +10,11 @@
  *  2. Registering Python code generators (`pythonGenerator.forBlock[...]`) that
  *     convert each block type into executable pandas / seaborn / plotly Python.
  *  3. Exporting `registerTidyblocks(registry)` — the single call that wires
- *     everything into a running `IBlocklyRegistry` from `jupyter-tidyblocks`.
+ *     everything into a running `IBlocklyRegistry` from `jupyter-blocks`.
  *
  * Usage — call from a JupyterLab plugin activate function:
  *
- *   import { registerTidyblocks } from 'jupyter-tidyblocks-blocks';
+ *   import { registerTidyblocks } from 'jupyter-tidyblocks';
  *
  *   activate(app, registry: IBlocklyRegistry) {
  *     registerTidyblocks(registry);
@@ -26,13 +26,13 @@
 // Each file calls Blockly.defineBlocksWithJsonArray() to register its block
 // shapes globally in Blockly.Blocks so they can be dragged from the toolbox.
 // ---------------------------------------------------------------------------
-import './blocks/data';       // Built-in datasets (penguins, earthquakes, …)
-import './blocks/transform';  // DataFrame operations (filter, select, group, …)
-import './blocks/combine';    // Multi-table ops (join, glue, cross-join)
-import './blocks/plot';       // Visualisations (bar, scatter, histogram, …)
-import './blocks/stats';      // Statistical tests and summaries
-import './blocks/value';      // Literal values (column ref, number, text, …)
-import './blocks/op';         // Expressions (arithmetic, compare, logic, …)
+import './blocks/data'; // Built-in datasets (penguins, earthquakes, …)
+import './blocks/transform'; // DataFrame operations (filter, select, group, …)
+import './blocks/combine'; // Multi-table ops (join, glue, cross-join)
+import './blocks/plot'; // Visualisations (bar, scatter, histogram, …)
+import './blocks/stats'; // Statistical tests and summaries
+import './blocks/value'; // Literal values (column ref, number, text, …)
+import './blocks/op'; // Expressions (arithmetic, compare, logic, …)
 
 // ---------------------------------------------------------------------------
 // Side-effectful Python generator imports.
@@ -49,7 +49,7 @@ import './generators/python/index';
 // they want to compose their own toolbox from it.
 export { TIDYBLOCKS_TOOLBOX } from './toolbox';
 
-import type { IBlocklyRegistry } from 'jupyter-tidyblocks';
+import type { IBlocklyRegistry } from 'jupyter-blocks';
 import { pythonGenerator } from 'blockly/python';
 import { TIDYBLOCKS_TOOLBOX } from './toolbox';
 

@@ -1,0 +1,92 @@
+[build-system]
+requires = ["hatchling>=1.5.0", "hatch-nodejs-version>=0.3.2", "jupyterlab>=4.0.0,<5"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jupyter_blocks"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Framework :: Jupyter",
+    "Framework :: Jupyter :: JupyterLab",
+    "Framework :: Jupyter :: JupyterLab :: 4",
+    "Framework :: Jupyter :: JupyterLab :: Extensions",
+    "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+dynamic = ["version", "description", "authors", "urls", "keywords"]
+
+[project.optional-dependencies]
+dev = [
+    "click",
+    "pre-commit",
+    "jupyter_releaser"
+]
+
+[tool.hatch.version]
+source = "nodejs"
+path = "../packages/blocks-extension/package.json"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/jupyter_blocks"]
+
+[tool.hatch.build.hooks.version]
+path = "src/jupyter_blocks/_version.py"
+
+[tool.hatch.metadata.hooks.nodejs]
+fields = ["description", "authors", "urls"]
+path = "../packages/blocks-extension/package.json"
+
+[tool.hatch.build.targets.sdist]
+artifacts = ["/jupyter_blocks/labextension"]
+exclude = ["/.github", "/binder", "node_modules"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"labextension" = "share/jupyter/labextensions/jupyter-blocks-extension"
+"install.json" = "share/jupyter/labextensions/jupyter-blocks-extension/install.json"
+
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder>=0.5"]
+build-function = "hatch_jupyter_builder.npm_builder"
+ensured-targets = [
+    "jupyter_blocks/labextension/static/style.js",
+    "jupyter_blocks/labextension/package.json",
+]
+skip-if-exists = ["jupyter_blocks/labextension/static/style.js"]
+
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+npm = ["jlpm"]
+build_cmd = "build:prod"
+
+[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
+build_cmd = "install:extension"
+npm = ["jlpm"]
+source_dir = "src"
+build_dir = "jupyter_blocks/labextension"
+
+[tool.jupyter-releaser.options]
+version_cmd = "python scripts/bump-version.py --force"
+
+[tool.jupyter-releaser.hooks]
+before-bump-version = [
+    "python -m pip install 'jupyterlab>=4.6.0,<5'",
+    "jlpm"
+]
+before-build-npm = [
+    "YARN_ENABLE_IMMUTABLE_INSTALLS=0 jlpm build:prod"
+]
+before-build-python = [
+    "jlpm build:prod"
+]
+
+[tool.check-wheel-contents]
+ignore = ["W002"]

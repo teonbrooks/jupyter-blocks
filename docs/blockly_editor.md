@@ -1,6 +1,6 @@
 # Blockly Editor
 
-The Blockly editor is mainly composed of two elements: the **toolbox**, situated on the left side of the screen and composed of all the available blocks organised in categories, and the **workspace**, a canvas where you can drag and drop the the chosen blocks for your code.
+The Blockly editor is mainly composed of two elements: the **toolbox**, situated on the left side of the screen and composed of all the available blocks organized in categories, and the **workspace**, a canvas where you can drag and drop the the chosen blocks for your code.
 
 ![Blockly Demo](_static/shortBlocklyDemo.gif)
 

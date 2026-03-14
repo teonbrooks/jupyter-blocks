@@ -50,20 +50,17 @@ pythonGenerator.forBlock['tidyblocks_op_not'] = (block, generator) => {
 };
 
 pythonGenerator.forBlock['tidyblocks_op_ifelse'] = (block, generator) => {
-  const cond =
-    generator.valueToCode(block, 'CONDITION', Order.NONE) || 'True';
+  const cond = generator.valueToCode(block, 'CONDITION', Order.NONE) || 'True';
   const ifTrue = generator.valueToCode(block, 'IF_TRUE', Order.NONE) || 'None';
   const ifFalse =
     generator.valueToCode(block, 'IF_FALSE', Order.NONE) || 'None';
-  return [
-    `np.where(${cond}, ${ifTrue}, ${ifFalse})`,
-    Order.FUNCTION_CALL
-  ];
+  return [`np.where(${cond}, ${ifTrue}, ${ifFalse})`, Order.FUNCTION_CALL];
 };
 
 pythonGenerator.forBlock['tidyblocks_op_typecheck'] = (block, generator) => {
   const check = block.getFieldValue('CHECK');
-  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
   const code: Record<string, string> = {
     IS_MISSING: `(${val}).isna()`,
     IS_NUMBER: `(${val}).apply(lambda v: isinstance(v, (int, float)))`,
@@ -76,7 +73,8 @@ pythonGenerator.forBlock['tidyblocks_op_typecheck'] = (block, generator) => {
 
 pythonGenerator.forBlock['tidyblocks_op_convert'] = (block, generator) => {
   const to = block.getFieldValue('TO');
-  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
   const code: Record<string, string> = {
     NUMBER: `pd.to_numeric(${val}, errors='coerce')`,
     TEXT: `(${val}).astype(str)`,
@@ -88,13 +86,15 @@ pythonGenerator.forBlock['tidyblocks_op_convert'] = (block, generator) => {
 
 pythonGenerator.forBlock['tidyblocks_op_datetime'] = (block, generator) => {
   const part = block.getFieldValue('PART');
-  const val = generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
   return [`(${val}).dt.${part}`, Order.MEMBER];
 };
 
 pythonGenerator.forBlock['tidyblocks_op_shift'] = (block, generator) => {
   const periods = block.getFieldValue('PERIODS');
-  const val = generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
   return [`(${val}).shift(${periods})`, Order.FUNCTION_CALL];
 };
 
@@ -116,7 +116,8 @@ pythonGenerator.forBlock['tidyblocks_op_math'] = (block, generator) => {
 
 pythonGenerator.forBlock['tidyblocks_op_string'] = (block, generator) => {
   const op = block.getFieldValue('OP');
-  const val = generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
   if (op === 'len') {
     return [`(${val}).str.len()`, Order.FUNCTION_CALL];
   }
@@ -125,13 +126,15 @@ pythonGenerator.forBlock['tidyblocks_op_string'] = (block, generator) => {
 
 pythonGenerator.forBlock['tidyblocks_op_str_contains'] = (block, generator) => {
   const pattern = block.getFieldValue('PATTERN').replace(/'/g, "\\'");
-  const val = generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.MEMBER) || '_df.iloc[:, 0]';
   return [`(${val}).str.contains('${pattern}', na=False)`, Order.FUNCTION_CALL];
 };
 
 // dplyr: between(x, left, right) — inclusive range check
 pythonGenerator.forBlock['tidyblocks_op_between'] = (block, generator) => {
-  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
   const left = block.getFieldValue('LEFT');
   const right = block.getFieldValue('RIGHT');
   return [`(${val}).between(${left}, ${right})`, Order.FUNCTION_CALL];
@@ -139,14 +142,17 @@ pythonGenerator.forBlock['tidyblocks_op_between'] = (block, generator) => {
 
 // dplyr: coalesce(x, y) — first non-missing value
 pythonGenerator.forBlock['tidyblocks_op_coalesce'] = (block, generator) => {
-  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
-  const replacement = generator.valueToCode(block, 'REPLACEMENT', Order.NONE) || 'None';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const replacement =
+    generator.valueToCode(block, 'REPLACEMENT', Order.NONE) || 'None';
   return [`(${val}).fillna(${replacement})`, Order.FUNCTION_CALL];
 };
 
 // dplyr: n_distinct(x) — count unique values
 pythonGenerator.forBlock['tidyblocks_op_n_distinct'] = (block, generator) => {
-  const val = generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
+  const val =
+    generator.valueToCode(block, 'VALUE', Order.NONE) || '_df.iloc[:, 0]';
   return [`(${val}).nunique()`, Order.FUNCTION_CALL];
 };
 

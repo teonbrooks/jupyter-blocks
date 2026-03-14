@@ -13,7 +13,7 @@ import { ToolboxDefinition } from 'blockly/core/utils/toolbox';
 /**
  * BlocklyManager is the per-document controller that bridges the
  * `BlocklyRegistry` (shared, extension-wide) with an individual
- * `.jpblockly` file's session context.
+ * `.jblk` file's session context.
  *
  * Each open document gets its own `BlocklyManager` so that different
  * documents can independently choose their toolbox (via the toolbar

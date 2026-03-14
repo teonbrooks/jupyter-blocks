@@ -249,7 +249,8 @@ Blockly.defineBlocksWithJsonArray([
     output: null,
     colour: '#F9B5B2',
     inputsInline: true,
-    tooltip: 'Replace missing values in a column with values from another column or expression.'
+    tooltip:
+      'Replace missing values in a column with values from another column or expression.'
   },
   // dplyr: n_distinct() — count of unique values in a column
   {

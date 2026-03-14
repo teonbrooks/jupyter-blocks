@@ -1,0 +1,99 @@
+{
+  "name": "jupyter-blocks-extension",
+  "version": "0.1.0-alpha.0",
+  "description": "Generic Blockly editor for JupyterLab — extension plugin.",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension",
+    "blockly",
+    "blocks"
+  ],
+  "homepage": "https://github.com/teonbrooks/jupyter-blocks",
+  "bugs": {
+    "url": "https://github.com/teonbrooks/jupyter-blocks/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": {
+    "name": "Teon L. Brooks",
+    "email": "teon.brooks@gmail.com"
+  },
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "style": "style/index.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/teonbrooks/jupyter-blocks"
+  },
+  "scripts": {
+    "build": "npm run build:lib && npm run build:labextension:dev",
+    "build:prod": "npm run clean && npm run build:lib && npm run build:labextension",
+    "build:labextension": "jupyter labextension build .",
+    "build:labextension:dev": "jupyter labextension build --development True .",
+    "build:lib": "tsc",
+    "clean": "npm run clean:lib",
+    "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
+    "clean:labextension": "rimraf ../../jupyter_blocks/labextension",
+    "clean:all": "npm run clean:lib && npm run clean:labextension",
+    "install:extension": "npm run build",
+    "watch": "run-p watch:src watch:labextension",
+    "watch:src": "tsc -w --sourceMap",
+    "watch:labextension": "jupyter labextension watch ."
+  },
+  "dependencies": {
+    "@jupyter-widgets/base": "^6.0.10",
+    "@jupyter-widgets/jupyterlab-manager": "^5.0.13",
+    "@jupyterlab/application": "^4.5",
+    "@jupyterlab/apputils": "^4.5",
+    "@jupyterlab/cells": "^4.5",
+    "@jupyterlab/codeeditor": "^4.5",
+    "@jupyterlab/filebrowser": "^4.5",
+    "@jupyterlab/launcher": "^4.5",
+    "@jupyterlab/mainmenu": "^4.5",
+    "@jupyterlab/rendermime": "^4.5",
+    "@jupyterlab/settingregistry": "^4.5",
+    "@jupyterlab/translation": "^4.5",
+    "@jupyterlab/ui-components": "^4.5",
+    "jupyter-blocks": "^0.1.0-alpha.0"
+  },
+  "devDependencies": {
+    "@jupyterlab/builder": "^4.5",
+    "npm-run-all2": "^7.0.0",
+    "rimraf": "^6.0.0",
+    "typescript": "~5.7"
+  },
+  "sideEffects": [
+    "style/*.css",
+    "style/index.js"
+  ],
+  "styleModule": "style/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "../../jupyter_blocks/labextension",
+    "sharedPackages": {
+      "jupyter-blocks": {
+        "bundled": true,
+        "singleton": true
+      },
+      "blockly": {
+        "bundled": true,
+        "singleton": true
+      },
+      "@jupyter-widgets/base": {
+        "bundled": false,
+        "singleton": true
+      },
+      "@jupyter-widgets/jupyterlab-manager": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
+  }
+}

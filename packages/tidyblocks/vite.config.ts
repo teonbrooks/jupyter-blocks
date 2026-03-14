@@ -12,7 +12,7 @@ export default defineConfig({
     },
     sourcemap: true,
     rollupOptions: {
-      external: ['blockly', 'jupyter-tidyblocks', /^blockly\//]
+      external: ['blockly', 'jupyter-blocks', /^blockly\//]
     }
   }
 });

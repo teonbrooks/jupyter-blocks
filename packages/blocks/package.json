@@ -1,18 +1,17 @@
 {
-  "name": "jupyter-tidyblocks",
-  "version": "0.1.0dev",
-  "description": "Tidy data analysis with Blockly blocks for JupyterLab — core library.",
+  "name": "jupyter-blocks",
+  "version": "0.1.0-alpha.0",
+  "description": "Generic Blockly editor for JupyterLab — core library.",
   "keywords": [
     "blockly",
     "jupyter",
     "jupyterlab",
     "jupyterlab-extension",
-    "tidy-data",
-    "data-analysis"
+    "blocks"
   ],
-  "homepage": "https://github.com/teonbrooks/jupyter-tidyblocks",
+  "homepage": "https://github.com/teonbrooks/jupyter-blocks",
   "bugs": {
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks/issues"
+    "url": "https://github.com/teonbrooks/jupyter-blocks/issues"
   },
   "license": "BSD-3-Clause",
   "author": {
@@ -35,7 +34,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks"
+    "url": "https://github.com/teonbrooks/jupyter-blocks"
   },
   "scripts": {
     "build": "vite build",
@@ -50,11 +49,16 @@
   },
   "dependencies": {
     "@blockly/field-colour": "^6.0.0",
+    "blockly": "^12.0",
+    "react": "^19.0",
+    "react-dom": "^19.0"
+  },
+  "peerDependencies": {
     "@jupyterlab/apputils": "^4.5",
     "@jupyterlab/cells": "^4.5",
     "@jupyterlab/codeeditor": "^4.5",
     "@jupyterlab/codemirror": "^4.5",
-    "@jupyterlab/coreutils": "^5.6",
+    "@jupyterlab/coreutils": "^6.5",
     "@jupyterlab/docregistry": "^4.5",
     "@jupyterlab/rendermime": "^4.5",
     "@jupyterlab/services": "^7.0",
@@ -62,10 +66,7 @@
     "@lumino/coreutils": "^2.2",
     "@lumino/messaging": "^2.0",
     "@lumino/signaling": "^2.1",
-    "@lumino/widgets": "^2.1",
-    "blockly": "^12.0",
-    "react": "^19.0",
-    "react-dom": "^19.0"
+    "@lumino/widgets": "^2.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.0",

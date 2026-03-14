@@ -13,7 +13,7 @@ import { BlocklyManager } from './manager';
 import { THEME } from './utils';
 
 /**
- * BlocklyLayout is the core visual container for a `.jpblockly` document.
+ * BlocklyLayout is the core visual container for a `.jblk` document.
  *
  * It is a `SplitLayout` (vertical) with two children:
  *  1. `_host` — a plain `Widget` whose DOM node is handed to `Blockly.inject`
@@ -204,9 +204,7 @@ export class BlocklyLayout extends SplitLayout {
     } else {
       CodeCell.execute(this._cell, this._sessionContext)
         .then(() => this._resizeWorkspace())
-        .catch(e =>
-          showErrorMessage('Execution error', String(e))
-        );
+        .catch(e => showErrorMessage('Execution error', String(e)));
     }
   }
 

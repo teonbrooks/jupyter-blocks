@@ -1,8 +1,8 @@
 # Architecture
 
-jupyter-tidyblocks is a JupyterLab extension that gives users a visual,
+jupyter-blocks is a JupyterLab extension that gives users a visual,
 drag-and-drop interface for tidy-data analysis.  Users compose pipelines by
-snapping together coloured blocks (powered by [Blockly](https://developers.google.com/blockly));
+snapping together colored blocks (powered by [Blockly](https://developers.google.com/blockly));
 the extension translates those blocks into pandas/seaborn/plotly Python and
 executes the code against a live Jupyter kernel.
 
@@ -11,14 +11,16 @@ executes the code against a live Jupyter kernel.
 ## Repository layout
 
 ```
-jupyter-tidyblocks/          ← monorepo root (Yarn workspaces + Turborepo)
+jupyter-blocks/              ← monorepo root (Yarn workspaces + Turborepo)
 ├── packages/
-│   ├── blockly/             ← Package: jupyter-tidyblocks
+│   ├── blocks/              ← Package: jupyter-blocks
 │   │   └── src/             ← Core editor integration with JupyterLab
-│   ├── tidyblocks/          ← Package: jupyter-tidyblocks-blocks
+│   ├── blocks-extension/    ← Package: jupyter-blocks-extension
+│   │   └── src/             ← JupyterLab plugin entry point (core)
+│   ├── tidyblocks/          ← Package: jupyter-tidyblocks
 │   │   └── src/             ← Tidy-data block definitions + Python generators
-│   └── blockly-extension/   ← Package: jupyter-tidyblocks-extension
-│       └── src/             ← JupyterLab plugin entry point
+│   └── tidyblocks-extension/ ← Package: jupyter-tidyblocks-extension
+│       └── src/             ← JupyterLab plugin entry point (tidy data)
 ├── jupyter_tidyblocks/      ← Python package (serves the labextension assets)
 ├── pyproject.toml           ← Python build config (hatchling)
 ├── package.json             ← Root monorepo config (Yarn workspaces)
@@ -27,34 +29,36 @@ jupyter-tidyblocks/          ← monorepo root (Yarn workspaces + Turborepo)
 
 ---
 
-## Three-package design
+## Four-package design
 
-The TypeScript side is intentionally split into three npm packages to keep
+The TypeScript side is intentionally split into four npm packages to keep
 concerns separate and to allow third-party plugins to add their own block sets
-without depending on `jupyter-tidyblocks-blocks`.
+without depending on `jupyter-tidyblocks`.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  jupyter-tidyblocks-extension  (blockly-extension/src/index.ts)     │
-│  JupyterFrontEndPlugin — wires everything together at activation    │
+│  jupyter-tidyblocks-extension  (tidyblocks-extension/src/index.ts)  │
+│  JupyterFrontEndPlugin — registers tidy data blocks at activation   │
 │                                                                     │
-│   ┌─────────────────────────────────┐   calls registerTidyblocks() │
-│   │  jupyter-tidyblocks             │◄────────────────────────────┐ │
-│   │  (blockly/src/)                 │                             │ │
-│   │                                 │   jupyter-tidyblocks-blocks │ │
+│   ┌─────────────────────────────────┐   calls registerTidyblocks()  │
+│   │  jupyter-blocks                 │◄────────────────────────────┐ │
+│   │  (blocks/src/)                  │                             │ │
+│   │                                 │   jupyter-tidyblocks        │ │
 │   │  BlocklyEditorFactory           │   (tidyblocks/src/)         │ │
 │   │  BlocklyRegistry                │                             │ │
 │   │  BlocklyManager                 │   Block definitions         │ │
 │   │  BlocklyLayout                  │   Python generators         │ │
 │   │  BlocklyEditor / BlocklyPanel   │   TIDYBLOCKS_TOOLBOX        │ │
 │   └─────────────────────────────────┘                             │ │
-│                                     └───────────────────────────── ┘ │
+│                                     └─────────────────────────────┘ │
+│  jupyter-blocks-extension  (blocks-extension/src/index.ts)          │
+│  JupyterFrontEndPlugin — wires core editor into JupyterLab          │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### `jupyter-tidyblocks` (core)
+### `jupyter-blocks` (core)
 
-The shared library consumed by the extension and by any other plugin that
+The shared library consumed by the extensions and by any other plugin that
 wants to extend the editor.  Contains:
 
 | File | Role |
@@ -62,15 +66,15 @@ wants to extend the editor.  Contains:
 | `token.ts` | Defines the `IBlocklyRegistry` interface + Lumino `Token` |
 | `registry.ts` | Concrete `BlocklyRegistry` — stores toolboxes and generators |
 | `manager.ts` | Per-document `BlocklyManager` — tracks active toolbox & kernel |
-| `factory.ts` | `BlocklyEditorFactory` — creates editor widgets for `.jpblockly` files |
+| `factory.ts` | `BlocklyEditorFactory` — creates editor widgets for `.jblk` files |
 | `layout.ts` | `BlocklyLayout` — injects Blockly, runs code, manages the split view |
 | `widget.ts` | `BlocklyEditor` (DocumentWidget) + `BlocklyPanel` (SplitPanel) |
 | `utils.ts` | JupyterLab-themed Blockly `THEME` + default `TOOLBOX` definition |
 
-### `jupyter-tidyblocks-blocks` (domain blocks)
+### `jupyter-tidyblocks` (domain blocks)
 
 Self-contained package of tidy-data blocks.  Has no runtime dependency on
-JupyterLab — it only needs `blockly` and `jupyter-tidyblocks` (type-only).
+JupyterLab — it only needs `blockly` and `jupyter-blocks` (type-only).
 
 ```
 src/
@@ -78,7 +82,7 @@ src/
 │   ├── data.ts      ← Dataset sources (penguins, earthquakes, CSV, …)
 │   ├── transform.ts ← DataFrame transforms (filter, select, group by, …)
 │   ├── combine.ts   ← Multi-table ops (join, glue, cross join)
-│   ├── plot.ts      ← Visualisations (bar, scatter, histogram, …)
+│   ├── plot.ts      ← Visualizations (bar, scatter, histogram, …)
 │   ├── stats.ts     ← Statistical tests (t-test, k-means, correlation, …)
 │   ├── value.ts     ← Literal values (column ref, number, text, datetime, …)
 │   └── op.ts        ← Expressions (arithmetic, compare, logic, string, …)
@@ -96,16 +100,22 @@ src/
 └── index.ts         ← Public entry point; exports registerTidyblocks()
 ```
 
-### `jupyter-tidyblocks-extension` (JupyterLab plugin)
+### `jupyter-blocks-extension` (JupyterLab core plugin)
 
 Thin entry-point package whose only job is:
 
-1. Instantiate `BlocklyEditorFactory` and register it + the `.jpblockly`
+1. Instantiate `BlocklyEditorFactory` and register it + the `.jblk`
    file type with JupyterLab's document registry.
 2. Add the "New Blockly Editor" launcher / command-palette command.
-3. Call `registerTidyblocks(registry)` to add the Tidy Data toolbox and
+3. Return the `IBlocklyRegistry` token so other plugins can extend the editor.
+
+### `jupyter-tidyblocks-extension` (JupyterLab tidy data plugin)
+
+Thin entry-point package whose only job is:
+
+1. Call `registerTidyblocks(registry)` to add the Tidy Data toolbox and
    Python generators.
-4. Return the `IBlocklyRegistry` token so other plugins can extend the editor.
+2. Depend on `IBlocklyRegistry` provided by `jupyter-blocks-extension`.
 
 ---
 
@@ -149,7 +159,7 @@ BlocklyEditorFactory          (one per JupyterLab session)
               ├── 'javascript'  ← javascriptGenerator
               └── 'lua'         ← luaGenerator
 
-BlocklyPanel                  (one per open .jpblockly file)
+BlocklyPanel                  (one per open .jblk file)
   └── BlocklyLayout           (SplitLayout)
         ├── _host: Widget     ← DOM node Blockly.inject() mounts into
         ├── _cell: CodeCell   ← read-only preview + output area
@@ -211,7 +221,7 @@ Third-party JupyterLab plugins can extend the editor by declaring a
 dependency on the `IBlocklyRegistry` token:
 
 ```typescript
-import { IBlocklyRegistry } from 'jupyter-tidyblocks';
+import { IBlocklyRegistry } from 'jupyter-blocks';
 
 const myPlugin: JupyterFrontEndPlugin<void> = {
   id: 'my-plugin',
@@ -235,16 +245,19 @@ const myPlugin: JupyterFrontEndPlugin<void> = {
 
 ```
 Turborepo (turbo.json)
-  build task dependency: blockly → tidyblocks → blockly-extension
+  build task dependency: blocks → tidyblocks → blocks-extension → tidyblocks-extension
   │
-  ├── jupyter-tidyblocks       → Vite (lib mode) → lib/index.mjs + .d.ts
-  ├── jupyter-tidyblocks-blocks → Vite (lib mode) → lib/index.mjs + .d.ts
+  ├── jupyter-blocks            → Vite (lib mode) → lib/index.mjs + .d.ts
+  ├── jupyter-tidyblocks        → Vite (lib mode) → lib/index.mjs + .d.ts
+  ├── jupyter-blocks-extension  → @jupyterlab/builder (webpack) →
+  │       jupyter_tidyblocks/labextension/   ← served by the Python package
   └── jupyter-tidyblocks-extension → @jupyterlab/builder (webpack) →
           jupyter_tidyblocks/labextension/   ← served by the Python package
 
 Python packaging (hatchling + hatch-jupyter-builder)
   builds the labextension assets as part of `pip install`
   installs into: {sys.prefix}/share/jupyter/labextensions/
+                   jupyter-blocks-extension/
                    jupyter-tidyblocks-extension/
 ```
 
@@ -252,7 +265,7 @@ Python packaging (hatchling + hatch-jupyter-builder)
 
 ## File format
 
-`.jpblockly` files are plain JSON serialised by Blockly's built-in workspace
-serialiser (`Blockly.serialization.workspaces.save/load`).  They store the
+`.jblk` files are plain JSON serialized by Blockly's built-in workspace
+serializer (`Blockly.serialization.workspaces.save/load`).  They store the
 full workspace state: block types, positions, field values, and variable
 definitions.  The format is human-readable and version-controlled friendly.

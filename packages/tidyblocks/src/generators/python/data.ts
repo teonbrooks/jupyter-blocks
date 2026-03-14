@@ -2,19 +2,17 @@ import { pythonGenerator, Order } from 'blockly/python';
 
 pythonGenerator.forBlock['tidyblocks_data_colors'] = () => {
   return (
-    "_df = pd.DataFrame({\n" +
+    '_df = pd.DataFrame({\n' +
     "    'name': ['red','orange','yellow','green','blue','indigo','violet','white','black','gray','brown'],\n" +
     "    'red':  [255,255,255,  0,  0,  75,238,255,  0,128, 165],\n" +
     "    'green':[  0,165,255,128,  0,  0,130,255,  0,128, 42],\n" +
     "    'blue': [  0,  0,  0,  0,255,130,238,255,  0,128, 42]\n" +
-    "})\n"
+    '})\n'
   );
 };
 
 pythonGenerator.forBlock['tidyblocks_data_earthquakes'] = () => {
-  return (
-    "_df = pd.read_csv('https://raw.githubusercontent.com/gvwilson/tidyblocks/master/data/earthquakes.csv')\n"
-  );
+  return "_df = pd.read_csv('https://raw.githubusercontent.com/gvwilson/tidyblocks/master/data/earthquakes.csv')\n";
 };
 
 pythonGenerator.forBlock['tidyblocks_data_penguins'] = () => {
@@ -41,7 +39,7 @@ pythonGenerator.forBlock['tidyblocks_data_titanic'] = () => {
 };
 
 pythonGenerator.forBlock['tidyblocks_data_gapminder'] = () => {
-  return "_df = px.data.gapminder()\n";
+  return '_df = px.data.gapminder()\n';
 };
 
 pythonGenerator.forBlock['tidyblocks_data_csv'] = block => {
