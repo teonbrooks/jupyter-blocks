@@ -1,7 +1,7 @@
 {
   "name": "jupyter-tidyblocks-extension",
-  "version": "0.1.0",
-  "description": "Tidy data analysis with Blockly blocks for JupyterLab — extension plugin.",
+  "version": "0.1.0-alpha.0",
+  "description": "Tidy data analysis extension for jupyter-blocks.",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -10,9 +10,9 @@
     "tidy-data",
     "data-analysis"
   ],
-  "homepage": "https://github.com/teonbrooks/jupyter-tidyblocks",
+  "homepage": "https://github.com/teonbrooks/jupyter-blocks",
   "bugs": {
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks/issues"
+    "url": "https://github.com/teonbrooks/jupyter-blocks/issues"
   },
   "license": "BSD-3-Clause",
   "author": {
@@ -28,13 +28,13 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/teonbrooks/jupyter-tidyblocks"
+    "url": "https://github.com/teonbrooks/jupyter-blocks"
   },
   "scripts": {
     "build": "npm run build:lib && npm run build:labextension:dev",
     "build:prod": "npm run clean && npm run build:lib && npm run build:labextension",
-    "build:labextension": "jupyter labextension build .",
-    "build:labextension:dev": "jupyter labextension build --development True .",
+    "build:labextension": "build-labextension --core-path $(python3 -c \"import jupyterlab,pathlib; print(pathlib.Path(jupyterlab.__file__).parent/'staging')\") .",
+    "build:labextension:dev": "build-labextension --development --core-path $(python3 -c \"import jupyterlab,pathlib; print(pathlib.Path(jupyterlab.__file__).parent/'staging')\") .",
     "build:lib": "tsc",
     "clean": "npm run clean:lib",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
@@ -43,24 +43,12 @@
     "install:extension": "npm run build",
     "watch": "run-p watch:src watch:labextension",
     "watch:src": "tsc -w --sourceMap",
-    "watch:labextension": "jupyter labextension watch ."
+    "watch:labextension": "build-labextension --development --watch --core-path $(python3 -c \"import jupyterlab,pathlib; print(pathlib.Path(jupyterlab.__file__).parent/'staging')\") ."
   },
   "dependencies": {
-    "@jupyter-widgets/base": "^6.0.10",
-    "@jupyter-widgets/jupyterlab-manager": "^5.0.13",
     "@jupyterlab/application": "^4.5",
-    "@jupyterlab/apputils": "^4.5",
-    "@jupyterlab/cells": "^4.5",
-    "@jupyterlab/codeeditor": "^4.5",
-    "@jupyterlab/filebrowser": "^4.5",
-    "@jupyterlab/launcher": "^4.5",
-    "@jupyterlab/mainmenu": "^4.5",
-    "@jupyterlab/rendermime": "^4.5",
-    "@jupyterlab/settingregistry": "^4.5",
-    "@jupyterlab/translation": "^4.5",
-    "@jupyterlab/ui-components": "^4.5",
-    "jupyter-tidyblocks": "^0.1.0",
-    "jupyter-tidyblocks-blocks": "^0.1.0"
+    "jupyter-blocks": "^0.1.0-alpha.0",
+    "jupyter-tidyblocks": "^0.1.0-alpha.0"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.5",
@@ -80,25 +68,21 @@
     "extension": true,
     "outputDir": "../../jupyter_tidyblocks/labextension",
     "sharedPackages": {
+      "jupyter-blocks": {
+        "bundled": false,
+        "singleton": true
+      },
       "jupyter-tidyblocks": {
         "bundled": true,
         "singleton": true
       },
       "blockly": {
-        "bundled": true,
-        "singleton": true
-      },
-      "@jupyter-widgets/base": {
-        "bundled": false,
-        "singleton": true
-      },
-      "@jupyter-widgets/jupyterlab-manager": {
         "bundled": false,
         "singleton": true
       }
     },
     "_build": {
-      "load": "static/remoteEntry.a2e6fa6b678931659f31.js",
+      "load": "static/remoteEntry.2b8d4329eca3b2e79b96.js",
       "extension": "./extension",
       "style": "./style"
     }

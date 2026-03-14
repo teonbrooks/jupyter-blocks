@@ -10,8 +10,8 @@
         {
           "test": "/(?<!\\.raw)\\.css$/",
           "use": [
-            "/Users/teonbrooks/codespace/jupyter-tidyblocks/node_modules/style-loader/dist/cjs.js",
-            "/Users/teonbrooks/codespace/jupyter-tidyblocks/node_modules/css-loader/dist/cjs.js"
+            "/Users/teonbrooks/codespace/jupyter-blocks/node_modules/style-loader/dist/cjs.js",
+            "/Users/teonbrooks/codespace/jupyter-blocks/node_modules/css-loader/dist/cjs.js"
           ]
         },
         {
@@ -81,7 +81,7 @@
           "test": "/\\.js$/",
           "enforce": "pre",
           "use": [
-            "/Users/teonbrooks/codespace/jupyter-tidyblocks/node_modules/source-map-loader/dist/cjs.js"
+            "/Users/teonbrooks/codespace/jupyter-blocks/node_modules/source-map-loader/dist/cjs.js"
           ]
         }
       ]
@@ -91,8 +91,8 @@
         "url": false,
         "buffer": false,
         "crypto": false,
-        "path": "/Users/teonbrooks/codespace/jupyter-tidyblocks/node_modules/path-browserify/index.js",
-        "process": "/Users/teonbrooks/codespace/jupyter-tidyblocks/node_modules/process/browser.js"
+        "path": "/Users/teonbrooks/codespace/jupyter-blocks/node_modules/path-browserify/index.js",
+        "process": "/Users/teonbrooks/codespace/jupyter-blocks/node_modules/process/browser.js"
       }
     },
     "watchOptions": {
@@ -102,7 +102,7 @@
     "output": {
       "hashFunction": "sha256",
       "filename": "[name].[contenthash].js",
-      "path": "/Users/teonbrooks/codespace/jupyter-tidyblocks/jupyter_tidyblocks/labextension/static",
+      "path": "/Users/teonbrooks/codespace/jupyter-blocks/jupyter_blocks/labextension/static",
       "publicPath": "auto"
     },
     "plugins": [
@@ -113,19 +113,19 @@
       },
       {
         "_options": {
-          "name": "jupyter-tidyblocks-extension",
+          "name": "jupyter-blocks-extension",
           "library": {
             "type": "var",
             "name": [
               "_JUPYTERLAB",
-              "jupyter-tidyblocks-extension"
+              "jupyter-blocks-extension"
             ]
           },
           "filename": "remoteEntry.[contenthash].js",
           "exposes": {
-            "./index": "/Users/teonbrooks/codespace/jupyter-tidyblocks/packages/blockly-extension/lib/index.js",
-            "./extension": "/Users/teonbrooks/codespace/jupyter-tidyblocks/packages/blockly-extension/lib/index.js",
-            "./style": "/Users/teonbrooks/codespace/jupyter-tidyblocks/packages/blockly-extension/style/index.js"
+            "./index": "/Users/teonbrooks/codespace/jupyter-blocks/packages/blocks-extension/lib/index.js",
+            "./extension": "/Users/teonbrooks/codespace/jupyter-blocks/packages/blocks-extension/lib/index.js",
+            "./style": "/Users/teonbrooks/codespace/jupyter-blocks/packages/blocks-extension/style/index.js"
           },
           "shared": {
             "@jupyterlab/application": {
@@ -719,17 +719,16 @@
               "singleton": true,
               "import": false
             },
-            "jupyter-tidyblocks": {
+            "jupyter-blocks": {
               "singleton": true
             },
-            "jupyter-tidyblocks-blocks": {},
             "blockly": {
               "singleton": true
             },
-            "jupyter-tidyblocks-extension": {
-              "version": "0.1.0",
+            "jupyter-blocks-extension": {
+              "version": "0.1.0-alpha.0",
               "singleton": true,
-              "import": "/Users/teonbrooks/codespace/jupyter-tidyblocks/packages/blockly-extension/lib/index.js"
+              "import": "/Users/teonbrooks/codespace/jupyter-blocks/packages/blocks-extension/lib/index.js"
             }
           }
         }

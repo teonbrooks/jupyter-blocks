@@ -1,0 +1,11 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": ["lib/**", "../../jupyter_tidyblocks/labextension/**"]
+    },
+    "build:prod": {
+      "outputs": ["lib/**", "../../jupyter_tidyblocks/labextension/**"]
+    }
+  }
+}
