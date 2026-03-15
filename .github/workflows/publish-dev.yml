@@ -1,0 +1,97 @@
+name: Publish Dev Build to TestPyPI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/jupyter-blocks
+    permissions:
+      id-token: write  # required for OIDC trusted publisher
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: pip install -U "jupyterlab>=4.0.0,<5" build
+
+      - name: Install JS dependencies
+        run: npm install
+
+      - name: Set dev version
+        run: |
+          python3 - <<'EOF'
+          import json
+          from pathlib import Path
+
+          run_number = "${{ github.run_number }}"
+          HERE = Path(".")
+          PACKAGE_JSON_PATHS = [
+              HERE / "package.json",
+              HERE / "packages" / "blocks" / "package.json",
+              HERE / "packages" / "blocks-extension" / "package.json",
+              HERE / "packages" / "tidyblocks" / "package.json",
+              HERE / "packages" / "tidyblocks-extension" / "package.json",
+          ]
+
+          VERSION_SOURCE = HERE / "packages" / "blocks-extension" / "package.json"
+          with VERSION_SOURCE.open() as f:
+              data = json.load(f)
+
+          # Strip any pre-release suffix: "0.1.0-alpha.0" -> "0.1.0"
+          base_version = data["version"].split("-")[0]
+          # hatch-nodejs-version converts "-dev.N" to PEP 440 ".devN"
+          dev_js_version = f"{base_version}-dev.{run_number}"
+
+          for path in PACKAGE_JSON_PATHS:
+              if path.exists():
+                  with path.open() as f:
+                      pkg = json.load(f)
+                  pkg["version"] = dev_js_version
+                  with path.open("w") as f:
+                      json.dump(pkg, f, indent=2)
+                      f.write("\n")
+
+          print(f"Set version to: {dev_js_version}")
+          EOF
+
+      - name: Build JS packages
+        # Build from repo root so labextension artifacts land in the expected
+        # locations and hatch-jupyter-builder's skip-if-exists check passes.
+        run: npm run build:prod
+
+      - name: Build jupyter_blocks
+        run: python -m build jupyter_blocks/
+
+      - name: Build jupyter_tidyblocks
+        run: python -m build jupyter_tidyblocks/
+
+      - name: Publish jupyter_blocks to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: jupyter_blocks/dist/
+          skip-existing: true
+
+      - name: Publish jupyter_tidyblocks to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: jupyter_tidyblocks/dist/
+          skip-existing: true
