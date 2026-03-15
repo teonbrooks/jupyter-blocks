@@ -346,6 +346,53 @@ entry (a stale artifact of the old `^5.6` constraint) caused a
 
 ---
 
+## 16. CI/CD & Release Infrastructure
+
+**Motivation:** The project had no automated publishing pipeline and several
+CI workflows were broken after the monorepo restructure.
+
+### publish-dev.yml — dev builds to TestPyPI
+
+Created `.github/workflows/publish-dev.yml` to publish pre-release dev builds
+automatically on every push to `main`. Key design decisions:
+
+- **OIDC trusted publisher** (no token secrets): the workflow uses
+  `id-token: write` permission and `pypa/gh-action-pypi-publish@release/v1`
+  with a `testpypi` environment. The project owner must configure two pending
+  trusted publishers on test.pypi.org (for `jupyter-blocks` and
+  `jupyter-tidyblocks`).
+- **Dev version injection**: a Python snippet strips the pre-release label from
+  the current JS version and appends `-dev.{run_number}` before building, so
+  published packages have PEP 440-valid versions like `0.1.0.dev42`.
+- **Symlink replacement**: `package.json` files in `jupyter_blocks/` and
+  `jupyter_tidyblocks/` are git-tracked symlinks (needed for
+  `hatch-nodejs-version` locally). In CI they are replaced with `rm -f` + `cp`
+  so the version-patched content is used and symlink resolution doesn't fail
+  inside the `pipx build` temp directory.
+- **`--wheel` flag**: `python -m build --wheel` bypasses the sdist-then-wheel
+  flow, avoiding all symlink-in-sdist issues entirely.
+
+### Workflow and config fixes
+
+| Issue | Fix |
+|---|---|
+| `base-setup` action incompatible with npm | Replaced with `setup-python@v5` + `setup-node@v4` in all workflows |
+| `actions/upload-artifact@v3` / `checkout@v3` deprecated | Upgraded to `@v4` across all workflows |
+| `check-release.yml` artifact name | `jupyterlab_blockly-releaser-dist-*` → `jupyter-blocks-releaser-dist-*` |
+| `jupyter_releaser` trying to build Python from repo root | Added `steps_to_skip: "build-python,check-python"` in `check-release.yml` |
+| `jupyter_releaser` root build targeting wrong dir | Added `python_package = "jupyter_blocks"` to root `pyproject.toml` |
+| `npm install` in `before-bump-version` dirtying `package-lock.json` | Moved to `before-build-npm` only |
+| `get_version()` returning `0.0.0` | `bump-version.py` now reads directly from `packages/blocks-extension/package.json` |
+| `json.dump` escaping em dashes as `\u2014` | Added `ensure_ascii=False` to all `json.dump` calls |
+| Internal workspace deps breaking after version bump | Changed `"^0.1.0-alpha.0"` → `"*"` for all intra-monorepo deps |
+
+### Version bump: 0.1.0-alpha.0 → 0.1.0
+
+All packages bumped to the first stable release version. Dev suffix is
+appended only during CI builds for TestPyPI.
+
+---
+
 ## 15. Deferred / Future Work
 
 The following features from the original

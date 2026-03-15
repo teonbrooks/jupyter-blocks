@@ -7,7 +7,7 @@
 
 **Base project:** jupyterlab-blockly v0.3.3 (forked from QuantStack/jupyterlab-blockly)
 **Current name:** jupyter-blocks / jupyter-tidyblocks
-**Current version:** 0.1.0-alpha.0
+**Current version:** 0.1.0
 
 ---
 
@@ -307,6 +307,53 @@ within the same monorepo.
 | `packages/tidyblocks` | **Vite** library mode | ✅ |
 | `packages/tidyblocks-extension` | **`@jupyterlab/builder ^4.5`** via `build-labextension` | ✅ |
 | Monorepo orchestration | **Turborepo** | ✅ |
+
+---
+
+## Phase 8 — CI/CD & Release Infrastructure ✅
+
+**Status: Complete**
+
+### Dev publishing to TestPyPI
+
+- ✅ Created `.github/workflows/publish-dev.yml`
+  - Triggers on push to `main` or manual dispatch
+  - Uses OIDC trusted publisher (no token secrets) with a `testpypi` environment
+  - Sets a dev version (`0.1.0-dev.{run_number}`) in all `package.json` files before building
+  - Copies `package.json` into each Python package directory (replacing symlinks via `rm -f` + `cp`) so `hatch-nodejs-version` resolves the file inside the build temp dir
+  - Builds both `jupyter_blocks` and `jupyter_tidyblocks` wheels with `python -m build --wheel`
+  - Publishes both to TestPyPI with `skip-existing: true`
+
+> **One-time setup required:** Two pending trusted publishers must be configured on [test.pypi.org](https://test.pypi.org) — one for `jupyter-blocks` and one for `jupyter-tidyblocks` — pointing at the `publish-dev.yml` workflow with environment `testpypi`.
+
+### Workflow fixes
+
+- ✅ Replaced `jupyterlab/maintainer-tools/.github/actions/base-setup@v1` with explicit `setup-python@v5` + `setup-node@v4` in all workflows (base-setup is yarn/jlpm-only and conflicts with `packageManager: npm`)
+- ✅ Upgraded all `actions/checkout@v3` → `v4`, `upload-artifact@v3` → `v4`
+- ✅ Fixed `check-release.yml`: artifact name `jupyterlab_blockly-releaser-dist-*` → `jupyter-blocks-releaser-dist-*`; added `steps_to_skip: "build-python,check-python"` (jupyter_releaser's Python build is incompatible with a monorepo with two Python packages in subdirectories)
+
+### Root pyproject.toml
+
+- ✅ Added `python_package = "jupyter_blocks"` so `jupyter_releaser` build steps target the correct subdirectory instead of the repo root (which has no `[build-system]`)
+- ✅ Moved `npm install` from `before-bump-version` hook to `before-build-npm` only (avoids dirtying `package-lock.json` before `bump-version.py`'s clean-state check runs)
+
+### bump-version.py
+
+- ✅ Reads current version directly from `packages/blocks-extension/package.json` instead of `jupyter_releaser.util.get_version()`, which was incorrectly returning `0.0.0` from the root `setup.py` shim
+- ✅ Uses regex to convert JS semver pre-release notation (`-alpha.N`, `-beta.N`, `-rc.N`) to PEP 440 (`aN`, `bN`, `rcN`) for `packaging.version.Version` parsing
+- ✅ Uses `ensure_ascii=False` in `json.dump` to preserve literal Unicode characters (e.g. em dashes) in package.json files
+
+### Workspace dependency pinning
+
+- ✅ All internal workspace dependencies changed from `"^0.1.0-alpha.0"` to `"*"` — prevents workspace link breakage when `bump-version.py` changes the version
+
+### Version
+
+- ✅ All packages bumped from `0.1.0-alpha.0` → `0.1.0`
+
+### Local build script
+
+- ✅ Created `scripts/build-local.sh` mirroring the `publish-dev.yml` steps for local iteration without CI
 
 ---
 
