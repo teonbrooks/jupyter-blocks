@@ -28,7 +28,11 @@ pip install pandas seaborn plotly scipy scikit-learn numpy
 ### From PyPI (once published)
 
 ```bash
+# Tidy data extension (automatically installs jupyter_blocks as a dependency)
 pip install jupyter_tidyblocks
+
+# Or install only the core Blockly editor:
+pip install jupyter_blocks
 ```
 
 ### From source (development install)
@@ -38,20 +42,23 @@ pip install jupyter_tidyblocks
 git clone https://github.com/teonbrooks/jupyter-blocks.git
 cd jupyter-blocks
 
-# 2. Install the Python package and build the JS packages
-pip install -e ".[dev]"
-jupyter labextension develop . --overwrite
+# 2. Install JavaScript dependencies and build all packages
+npm install
 npm run build
 
-# 3. Verify the extension is registered
+# 3. Install both Python packages in editable mode
+pip install -e ./jupyter_blocks
+pip install -e ./jupyter_tidyblocks
+
+# 4. Verify the extensions are registered
 jupyter labextension list
 ```
 
-You should see a line like:
+You should see lines like:
 
 ```
-jupyter-blocks-extension v0.1.0  enabled  OK  (python, jupyter_blocks)
-jupyter-tidyblocks-extension v0.1.0  enabled  OK  (python, jupyter_tidyblocks)
+jupyter-blocks-extension v0.1.0-alpha.0  enabled  OK  (python, jupyter_blocks)
+jupyter-tidyblocks-extension v0.1.0-alpha.0  enabled  OK  (python, jupyter_tidyblocks)
 ```
 
 ---
@@ -239,15 +246,18 @@ npm run build
 npm run watch
 ```
 
+After rebuilding, reinstall the Python packages so the updated labextension
+bundles are deployed to JupyterLab's data directory:
+
+```bash
+pip install --no-deps --force-reinstall -e ./jupyter_blocks
+pip install --no-deps --force-reinstall -e ./jupyter_tidyblocks
+```
+
+Then hard-refresh JupyterLab in the browser (`Cmd+Shift+R` / `Ctrl+Shift+R`).
+
 To run unit tests:
 
 ```bash
 npm test
-```
-
-To rebuild and reinstall the labextension into JupyterLab's static assets
-(needed if you change the extension's Module Federation output):
-
-```bash
-jupyter labextension develop . --overwrite
 ```

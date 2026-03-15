@@ -1,8 +1,13 @@
-# jupyter-tidyblocks Modernization Plan
+# jupyter-blocks Modernization Plan
+
+> **Historical document.** This plan was written during initial development. Phases 1–6 track the
+> migration from `jupyterlab-blockly` to `jupyter-tidyblocks`. **Phase 7** covers the subsequent
+> monorepo restructure that split the project into two independently installable packages:
+> `jupyter-blocks` (generic Blockly editor) and `jupyter-tidyblocks` (tidy-data layer).
 
 **Base project:** jupyterlab-blockly v0.3.3 (forked from QuantStack/jupyterlab-blockly)
-**Target name:** jupyter-tidyblocks
-**Target version:** 0.1.0
+**Current name:** jupyter-blocks / jupyter-tidyblocks
+**Current version:** 0.1.0-alpha.0
 
 ---
 
@@ -261,6 +266,47 @@ The Python module directory `jupyterlab_blockly/` was renamed to `jupyter_tidybl
 - `pyproject.toml` (all path references)
 - `packages/blockly-extension/package.json` (`outputDir`)
 - `turbo.json` (outputs glob)
+
+---
+
+## Phase 7 — Monorepo Restructure: jupyter-blocks + jupyter-tidyblocks ✅
+
+**Status: Complete**
+
+Split the single-package project into two independently installable JupyterLab extensions
+within the same monorepo.
+
+| Before | After |
+|---|---|
+| `packages/blockly/` (`jupyter-tidyblocks`) | `packages/blocks/` (`jupyter-blocks`) |
+| `packages/blockly-extension/` (`jupyter-tidyblocks-extension`) | `packages/blocks-extension/` (`jupyter-blocks-extension`) |
+| — | `packages/tidyblocks-extension/` (new thin wiring plugin) |
+| `jupyter_tidyblocks/pyproject.toml` (root-level) | `jupyter_blocks/pyproject.toml` + `jupyter_tidyblocks/pyproject.toml` |
+
+### Key changes
+
+- **`packages/blocks`**: renamed from `packages/blockly`; `registerTidyblocks` call removed; plugin id `jupyter-blocks:plugin`; file extension `.jpblockly` → `.jblk`; `@jupyterlab/*` and `@lumino/*` moved to `peerDependencies`
+- **`packages/blocks-extension`**: renamed from `packages/blockly-extension`; `outputDir` → `../../jupyter_blocks/labextension`
+- **`packages/tidyblocks-extension`**: new package; thin plugin that calls `registerTidyblocks(registry)` using the `IBlocklyRegistry` token from `jupyter-blocks`
+- **`jupyter_blocks/`**: new Python package; `pyproject.toml` with `hatch-nodejs-version` version source pointing to `packages/blocks-extension/package.json`
+- **`jupyter_tidyblocks/`**: Python package moved out of repo root into subdirectory; depends on `jupyter_blocks`
+
+### Build fixes (also resolved in Phase 7)
+
+- Replaced `jupyter labextension build` with direct `build-labextension` calls to bypass the `jlpm` install step that conflicts with npm workspace symlinks
+- Fixed turbo output declarations: each extension package now has its own `turbo.json` listing only its own labextension output; prevents cache restores from overwriting freshly built artifacts
+- Added `LICENSE` and `README.md` symlinks to each Python package directory for hatchling
+- Added versioned npm override `@jupyterlab/coreutils@<6 → 6.5.6` and `postinstall` cleanup to eliminate `crypto@1.0.1` deprecation warning
+
+### Build system summary (current)
+
+| Package | Build tool | Status |
+|---|---|---|
+| `packages/blocks` | **Vite** library mode | ✅ |
+| `packages/blocks-extension` | **`@jupyterlab/builder ^4.5`** (webpack 5) via `build-labextension` | ✅ |
+| `packages/tidyblocks` | **Vite** library mode | ✅ |
+| `packages/tidyblocks-extension` | **`@jupyterlab/builder ^4.5`** via `build-labextension` | ✅ |
+| Monorepo orchestration | **Turborepo** | ✅ |
 
 ---
 
