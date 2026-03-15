@@ -1,6 +1,6 @@
 {
   "name": "jupyter-blocks-extension",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Generic Blockly editor for JupyterLab — extension plugin.",
   "keywords": [
     "jupyter",
@@ -58,7 +58,7 @@
     "@jupyterlab/settingregistry": "^4.5",
     "@jupyterlab/translation": "^4.5",
     "@jupyterlab/ui-components": "^4.5",
-    "jupyter-blocks": "^0.1.0-alpha.0"
+    "jupyter-blocks": "*"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.5",

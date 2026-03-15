@@ -144,7 +144,7 @@ This plan covers four areas of work:
 
 A new monorepo package providing tidy-data analysis blocks ported and extended from [gvwilson/tidyblocks](https://github.com/gvwilson/tidyblocks).
 
-See [`tidyblocks-features.md`](tidyblocks-features.md) for the complete block-by-block specification.
+See [`jupyter-tidyblocks-features.md`](jupyter-tidyblocks-features.md) for the complete block-by-block specification.
 
 **Built with Vite** (library mode, same setup as Phase 3b — no module federation needed).
 

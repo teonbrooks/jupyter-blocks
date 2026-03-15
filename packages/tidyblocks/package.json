@@ -1,6 +1,6 @@
 {
   "name": "jupyter-tidyblocks",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Tidy data analysis blocks for jupyter-blocks.",
   "keywords": [
     "blockly",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "blockly": "^12.0",
-    "jupyter-blocks": "^0.1.0-alpha.0"
+    "jupyter-blocks": "*"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.0",

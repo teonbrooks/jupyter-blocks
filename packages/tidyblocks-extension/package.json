@@ -1,6 +1,6 @@
 {
   "name": "jupyter-tidyblocks-extension",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Tidy data analysis extension for jupyter-blocks.",
   "keywords": [
     "jupyter",
@@ -47,8 +47,8 @@
   },
   "dependencies": {
     "@jupyterlab/application": "^4.5",
-    "jupyter-blocks": "^0.1.0-alpha.0",
-    "jupyter-tidyblocks": "^0.1.0-alpha.0"
+    "jupyter-blocks": "*",
+    "jupyter-tidyblocks": "*"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.5",

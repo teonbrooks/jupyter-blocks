@@ -1,0 +1,18 @@
+[tool.jupyter-releaser.options]
+version_cmd = "python scripts/bump-version.py --force"
+# jupyter_releaser build-python runs `pipx run build .` from this directory.
+# Point it at jupyter_blocks so the root (which has no build-system) is not used.
+# jupyter_tidyblocks is released separately or via publish-dev.yml.
+python_package = "jupyter_blocks"
+
+[tool.jupyter-releaser.hooks]
+before-bump-version = [
+    "python -m pip install 'jupyterlab>=4.0.0,<5'"
+]
+before-build-npm = [
+    "npm install",
+    "npm run build:prod"
+]
+before-build-python = [
+    "npm run build:prod"
+]

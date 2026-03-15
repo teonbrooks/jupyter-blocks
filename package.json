@@ -1,7 +1,7 @@
 {
   "name": "jupyter-blocks-root",
   "private": true,
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Blockly-based notebook editor for JupyterLab — core library and tidy-data extension.",
   "keywords": [
     "jupyter",

@@ -37,7 +37,7 @@ dev = [
 
 [tool.hatch.version]
 source = "nodejs"
-path = "../packages/tidyblocks-extension/package.json"
+path = "package.json"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/jupyter_tidyblocks"]
@@ -47,11 +47,13 @@ path = "src/jupyter_tidyblocks/_version.py"
 
 [tool.hatch.metadata.hooks.nodejs]
 fields = ["description", "authors", "urls"]
-path = "../packages/tidyblocks-extension/package.json"
+path = "package.json"
 
 [tool.hatch.build.targets.sdist]
 artifacts = ["/jupyter_tidyblocks/labextension"]
 exclude = ["/.github", "/binder", "node_modules"]
+[tool.hatch.build.targets.sdist.force-include]
+"../packages/tidyblocks-extension/package.json" = "package.json"
 
 [tool.hatch.build.targets.wheel.shared-data]
 "labextension" = "share/jupyter/labextensions/jupyter-tidyblocks-extension"
@@ -61,34 +63,34 @@ exclude = ["/.github", "/binder", "node_modules"]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "jupyter_tidyblocks/labextension/static/style.js",
-    "jupyter_tidyblocks/labextension/package.json",
+    "labextension/static/style.js",
+    "labextension/package.json",
 ]
-skip-if-exists = ["jupyter_tidyblocks/labextension/static/style.js"]
+skip-if-exists = ["labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
-npm = ["jlpm"]
+npm = ["npm"]
 build_cmd = "build:prod"
 
 [tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
 build_cmd = "install:extension"
-npm = ["jlpm"]
+npm = ["npm"]
 source_dir = "src"
-build_dir = "jupyter_tidyblocks/labextension"
+build_dir = "labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "python scripts/bump-version.py --force"
 
 [tool.jupyter-releaser.hooks]
 before-bump-version = [
-    "python -m pip install 'jupyterlab>=4.6.0,<5'",
-    "jlpm"
+    "python -m pip install 'jupyterlab>=4.0.0,<5'",
+    "npm install"
 ]
 before-build-npm = [
-    "YARN_ENABLE_IMMUTABLE_INSTALLS=0 jlpm build:prod"
+    "npm run build:prod"
 ]
 before-build-python = [
-    "jlpm build:prod"
+    "npm run build:prod"
 ]
 
 [tool.check-wheel-contents]

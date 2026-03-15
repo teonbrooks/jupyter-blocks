@@ -13,19 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Base Setup
-        uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Check Release
         uses: jupyter-server/jupyter_releaser/.github/actions/check-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          # build-python/check-python are skipped because this is a monorepo
+          # with two Python packages in subdirectories. Python build correctness
+          # is verified by the separate build.yml workflow instead.
+          steps_to_skip: "build-python,check-python"
 
       - name: Upload Distributions
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: jupyterlab_blockly-releaser-dist-${{ github.run_number }}
+          name: jupyter-blocks-releaser-dist-${{ github.run_number }}
           path: |
             .jupyter_releaser_checkout/dist

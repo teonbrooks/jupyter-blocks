@@ -12,42 +12,43 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Base Setup
-      uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
-    - name: Install dependencies
-      run: python -m pip install -U "jupyterlab>=4.0.0,<5"
-    
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install Python dependencies
+      run: pip install -U "jupyterlab>=4.0.0,<5" build
+
+    - name: Install JS dependencies
+      run: npm install
+
     - name: Lint the extension
-      run: |
-        set -eux
-        jlpm
-        jlpm eslint:check
+      run: npm run eslint:check
 
-    - name: Build the extension
-      run: |
-        set -eux
-        python -m pip install .
+    - name: Build JS packages
+      run: npm run build:prod
 
-        jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "jupyterlab-blockly-extension.*OK"
-        python -m jupyterlab.browser_check
-    
-    - name: Package the extension
-      run: |
-        set -eux
+    - name: Build jupyter_blocks
+      run: python -m build jupyter_blocks/
 
-        pip install build
-        python -m build
-        pip uninstall -y "jupyterlab_blockly" jupyterlab
+    - name: Build jupyter_tidyblocks
+      run: python -m build jupyter_tidyblocks/
 
     - name: Upload extension packages
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: extension-artifacts
-        path: dist/jupyterlab_blockly*
+        path: |
+          jupyter_blocks/dist/jupyter_blocks*
+          jupyter_tidyblocks/dist/jupyter_tidyblocks*
         if-no-files-found: error
 
   test_isolated:
@@ -55,14 +56,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install Python
-      uses: actions/setup-python@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
-        architecture: 'x64'
-    - uses: actions/download-artifact@v3
+        python-version: '3.11'
+
+    - uses: actions/download-artifact@v4
       with:
         name: extension-artifacts
+
     - name: Install and Test
       run: |
         set -eux
@@ -70,11 +72,13 @@ jobs:
         sudo rm -rf $(which node)
         sudo rm -rf $(which node)
 
-        pip install "jupyterlab>=4.0.0,<5" jupyterlab_blockly*.whl
-
+        pip install "jupyterlab>=4.0.0,<5"
+        pip install --no-deps jupyter_blocks/dist/jupyter_blocks*.whl
+        pip install --no-deps jupyter_tidyblocks/dist/jupyter_tidyblocks*.whl
 
         jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "jupyterlab-blockly.*OK"
+        jupyter labextension list 2>&1 | grep -ie "jupyter-blocks-extension.*OK"
+        jupyter labextension list 2>&1 | grep -ie "jupyter-tidyblocks-extension.*OK"
         python -m jupyterlab.browser_check --no-browser-test
 
   check_links:
@@ -82,6 +86,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v3
-      - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - uses: jupyterlab/maintainer-tools/.github/actions/check-links@v1
