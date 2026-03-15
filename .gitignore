@@ -116,7 +116,6 @@ dmypy.json
 
 # npm
 node_modules/
-package-lock.json
 
 # yarn.lock is regenerated as a build side-effect by @jupyterlab/builder's
 # bundled jlpm (yarn) when running `jupyter labextension build`.
